@@ -2,7 +2,6 @@
 This module provides a collection of functions for working with the console.
 
 Functions:
-- block(...): Prints a message block to the console.
 - init(...): Initializes the console configuration.
 - clear_screen(): Clears the console screen.
 - add_lvl(): Adds a new level to the console.
@@ -21,6 +20,17 @@ Functions:
 
 Constants:
 - NAME: The name of the module.
+
+Decorators:
+- block(...): Decorator to create a block of text.
+
+Notes:
+- The console is managed by the Console class.
+- The console configuration is managed by the Config class.
+- The console colors are managed by the ColorText and ColorBackground classes.
+- The console text styles are managed by the StyleText class.
+- The console emojis are managed by the Emoji class.
+- The console exceptions are managed by the exceptions module.
 """
 
 
@@ -56,7 +66,7 @@ __END_LANGS = {
 # ~~                         decorators                         ~~ #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 def block(message_block: Union[str, dict],
-          text_color: str = BLUE,
+          text_color: str = 'BLUE',
           bg_color: str = ''
           ) -> Callable[..., Any]:
     """
@@ -180,6 +190,20 @@ def init(clear: bool = True,
     if clear:
         clear_screen()
     _ConsoleConfig._is_init = True
+
+
+def reset_colors() -> None:
+    """
+    Reset the colors of the console
+    """
+    print(ColorText().reset(), end='')
+
+
+def reset_config() -> None:
+    """
+    Reset the configuration of the console
+    """
+    _ConsoleConfig.reset_config()
 
 
 def clear_screen():
@@ -314,7 +338,7 @@ def __to_string(*values: Any, sep: str = ' ') -> str:
     return sep.join([str(m) for m in values])
 
 
-def start_block(*message: Any, color: str = BLUE, bg_color: str = '') -> None:
+def start_block(*message: Any, color: str = 'BLUE', bg_color: str = '') -> None:
     """
     Start a block of messages
 
@@ -338,7 +362,7 @@ def start_block(*message: Any, color: str = BLUE, bg_color: str = '') -> None:
 
 
 def end_block(*message: Any,
-              color: str = BLUE,
+              color: str = 'BLUE',
               bg_color: str = '',
               style: str = ''
               ) -> None:
@@ -370,7 +394,7 @@ def end_block(*message: Any,
 
 
 def warning(*message: Any,
-            color: str = BLUE,
+            color: str = 'BLUE',
             bg_color: str = '',
             style: str = ''
             ) -> None:
@@ -396,7 +420,7 @@ def warning(*message: Any,
 
 
 def error(*message: Any,
-          color: str = RED,
+          color: str = 'RED',
           bg_color: str = '',
           style: str = ''
           ) -> None:
@@ -479,7 +503,7 @@ def print_color_list() -> None:
     """
     println('Colors available:')
     add_lvl()
-    for e in COLORS_LIST:
+    for e in ColorText():
         println(f'{e:7} : ', endl='')
         println(NAME, color=e, withlvl=False)
     del_lvl()
@@ -487,7 +511,7 @@ def print_color_list() -> None:
 
     print('Background colors available:')
     add_lvl()
-    for e in BACKGROUNDS_LIST:
+    for e in ColorBackground():
         println(f'{e:10} : ', endl='')
         println(NAME, bg_color=e, withlvl=False)
     del_lvl()
@@ -499,7 +523,7 @@ def print_style_list() -> None:
     """
     println('Styles available:')
     add_lvl()
-    for e in STYLES_LIST:
+    for e in StyleText():
         println(f'{e:10} : ', endl='')
         println(NAME, style=e, withlvl=False)
     del_lvl()
