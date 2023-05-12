@@ -238,12 +238,13 @@ def _colorize(text: str,
     str
         The colorized text
     """
-    colorized_text = get_color(color) + \
-                     get_background(bg_color) + \
-                     get_style(style) + \
-                     text
+    ctext = ColorText()
+    cbaground = ColorBackground()
+    stext = StyleText()
+    colorized_text = f'{ctext[color]}{cbaground[bg_color]}{stext[style]}{text}'
+
     if reset_console_colors:
-        colorized_text += reset_colors()
+        colorized_text += ctext.reset()
 
     return colorized_text
 
