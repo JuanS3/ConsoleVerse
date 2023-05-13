@@ -7,6 +7,7 @@ Functions:
 - add_lvl(): Adds a new level to the console.
 - del_lvl(): Deletes the last added level from the console.
 - println(...): Prints a message to the console.
+- inputln(...): Prints a message to the console and returns the user input.
 - start_block(...): Starts a new message block with a given color and background color.
 - end_block(...): Ends the current message block and prints a message.
 - warning(...): Prints a warning message to the console.
@@ -1036,3 +1037,67 @@ def print_matrix(matrix,
         __print_matrix_box_style(**kwargs)
     elif style in ('numpy', 'np'):
         __print_matrix_numpy_style(**kwargs)
+
+
+def inputln(*message: Any,
+            endl: str = '',
+            input_type: type = str,
+            withlvl: bool = True,
+            color: str = '',
+            bg_color: str = '',
+            reset_all_colors: bool = True,
+            style: str = '',
+            sep: str = ' '
+            ) -> None:
+    """
+    A utility function that prompts the user to input data from the console,
+    with support for customization of the prompt message appearance.
+
+
+    Parameters
+    ----------
+    message : Any
+        Message to print to console
+
+    endl : str, optional
+        The end of the message, by default is empty
+
+    input_type : type, optional
+        The type of the input, by default `str`. This parameter specifies
+        the type of the returned user input value.
+
+    withlvl : bool, optional
+        True if the message should be printed with the current indentation
+        False is not necessary, by default `True`
+
+    color : str, optional
+        The color of the message, the color must be one of the `COLORS_LIST`
+        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        by default has no color
+
+    bg_color : str, optional
+        The background color of the message, the color must be one of the `BACKGROUNS_LIST`
+        or `COLORS_LIST` for all colors available; by default has no color
+
+    reset_all_colors : bool, optional
+        True to reset all colors, False is not necessary, by default `True`
+
+    style : str, optional
+        The style of the message, the style must be one of the `STYLES_LIST`,
+        by default has no style
+
+    sep : str, optional
+        The separator between the values, by default is a space
+    """
+    println(
+        *message,
+        endl=endl,
+        withlvl=withlvl,
+        color=color,
+        bg_color=bg_color,
+        reset_all_colors=reset_all_colors,
+        style=style,
+        sep=sep
+    )
+
+    return input_type(input())
