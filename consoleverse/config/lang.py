@@ -23,6 +23,20 @@ class LanguageError(ValueError):
     pass
 
 
+def singleton(lang):
+    def wrapper(cls):
+        instances = {}
+
+        def getinstance():
+            if lang not in instances:
+                instances[lang] = cls()
+            return instances[lang]
+
+        return getinstance
+
+    return wrapper
+
+@singleton('en')
 class Language:
     _language = 'en'
 
@@ -54,6 +68,11 @@ class Language:
 
     def __repr__(self) -> str:
         return f'Language({self._language!r})'
+
+    def __getitem__(self, language: str) -> str:
+        if language not in self.LANGUAGES:
+            raise LanguageError(f'Invalid language: {language!r}')
+        return language
 
 
 _language = Language()

@@ -41,7 +41,7 @@ The following are the available text styles:
     - REVERSED
 """
 
-from term.exceptions.ex_colors import (
+from consoleverse.term.exceptions.ex_colors import (
     ColorTextError,
     ColorBackgroundError,
     ColorStyleError
@@ -133,7 +133,8 @@ class ColorText(ColorTextCode):
             raise ColorTextError(color)
 
     def __contains__(self, color):
-        return color.upper() in self.COLORS
+        if color:
+            return color.upper() in self.COLORS
 
     def __str__(self):
         return str(self.COLORS_LIST)
