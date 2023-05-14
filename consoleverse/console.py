@@ -629,6 +629,130 @@ def __print_matrix_row(row: list,
     println(end_line, color=color_style, withlvl=False)
 
 
+def __print_matrix_base(matrix,
+                        header: List[str],
+                        indexes: Union[List[str], str],
+                        nan_format: str,
+                        color: str,
+                        color_index: str,
+                        color_style: str,
+                        max_len_value: int,
+                        len_index: int,
+                        style : str,
+                        withlvl: bool,
+                        start_line: str,
+                        end_line: str,
+                        top_line: str,
+                        bottom_line: str,
+                        middle_vertical_line: str,
+                        middle_horizontal_line: str,
+                        level_space: int = 3
+                        ) -> None:
+    """
+    The matrix has been printed in a box or semibox style.
+
+    Parameters
+    ----------
+    matrix : Iterable object
+        An iterable object to print
+
+    header : List[str], optional
+        If the matrix has a header to print with them, by default None
+
+    indexes : List[str] | str, optional
+        A list of strings if is a presonalized index name,
+        - `all` to show number index for row and columns, only show the index for columns if the
+        header are empty (`None`)
+        - `row` to show the index of the row,
+        - `col` to show the index of the column
+        - `None` do not show any index, by default `all`
+
+    nan_format : str, optional
+        The formatted string to print a NaN/None value, by default ''
+
+    color : str, optional
+        The color of the matrix items, the color must be one of the `COLORS_LIST`
+        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        by default has no color
+
+    color_index : str, optional
+        The color of the index, the color must be one of the `COLORS_LIST`
+        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        by default has no color
+
+    color_style : str, optional
+        The color style to print the matrix, for example the grid lines,
+        the color must be one of the `COLORS_LIST`
+        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        by default has no color
+
+    max_len_value : int
+        Longest value of the array
+
+    len_index : int
+        Longest index of the array
+
+    style : str, optional
+        The style to print the matrix, by default `box`
+        - `box` Borders around the matrix
+        - `semibox` Borders at the top and left of the matrix
+
+    withlvl : bool, optional
+        True if the matrix should be printed with the current indentation False in otherwise
+
+    start_line : str
+        The beginning of line to be printed
+
+    end_line : str
+        The end of line to be printed
+
+    top_line : str, optional
+        The top line of the matrix
+
+    bottom_line : str, optional
+        The bottom line of the matrix
+
+    middle_vertical_line : str, optional
+        The middle vertical line of the matrix
+
+    middle_horizontal_line : str, optional
+        The middle horizontal line of the matrix
+
+    level_space : int, optional
+        The space between the level and the matrix, by default 3
+    """
+    indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
+
+    if header:
+        __print_matrix_header(header=header,
+                              len_index=len_index,
+                              color_index=color_index,
+                              extra_spacing='',
+                              withlvl=withlvl,
+                              max_len_value=max_len_value,
+                              lvl_space=level_space
+                              )
+
+    if top_line is not None and top_line != '':
+        println(top_line, color=color_style, withlvl=False)
+
+    for index_row_id, row in enumerate(matrix):
+        __print_matrix_row(row = row,
+                           max_len_value = max_len_value,
+                           color = color,
+                           nan_format = nan_format,
+                           color_style = color_style,
+                           color_index = color_index,
+                           end_line = end_line,
+                           start_line = start_line,
+                           index_name = f'{indexes[index_row_id]: >{len_index}}' if indexes is not None else '',
+                           indentation = indentation
+                           )
+
+    if bottom_line is not None and bottom_line != '':
+        println(bottom_line, color=color_style, withlvl=False)
+
+
 def __print_matrix_box_style(matrix,
                              header: List[str],
                              indexes: Union[List[str], str],
@@ -697,33 +821,24 @@ def __print_matrix_box_style(matrix,
     spaces: str = ' ' * (len_index + 3)
     indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
 
-    if header is not None:
-        __print_matrix_header(header = header,
-                              len_index = len_index,
-                              color_index = color_index,
-                              extra_spacing = '',
-                              withlvl = withlvl,
-                              max_len_value = max_len_value
-                              )
-
-    bar_div = lambda: println(f'{indentation}{spaces}{div}', color=color_style, withlvl=False)
-
-    bar_div()
-
-    for index_row_id, row in enumerate(matrix):
-        __print_matrix_row(row = row,
-                           max_len_value = max_len_value,
-                           color = color,
-                           nan_format = nan_format,
-                           color_style = color_style,
-                           color_index = color_index,
-                           end_line = ' | ' if style == 'box' else '',
-                           start_line = ' | ',
-                           index_name = f'{indexes[index_row_id]: >{len_index}}' if indexes is not None else '',
-                           indentation = indentation
-                           )
-
-    bar_div() if style == 'box' else new_line()
+    __print_matrix_base(matrix=matrix,
+                        header=header,
+                        indexes=indexes,
+                        nan_format=nan_format,
+                        color=color,
+                        color_index=color_index,
+                        color_style=color_style,
+                        max_len_value=max_len_value,
+                        len_index=len_index,
+                        style=style,
+                        withlvl=withlvl,
+                        start_line=' | ',
+                        end_line=f' | ' if style == 'box' else '',
+                        top_line=f'{indentation}{spaces}{div}',
+                        bottom_line=f'{indentation}{spaces}{div}' if style == 'box' else new_line(),
+                        middle_vertical_line=None,
+                        middle_horizontal_line=None
+                        )
 
 
 def __print_matrix_numpy_style(matrix,
@@ -1074,108 +1189,6 @@ def __print_matrix_doubleline_style(matrix,
                         )
 
 
-def __print_matrix_base(matrix,
-                        header: List[str],
-                        indexes: Union[List[str], str],
-                        nan_format: str,
-                        color: str,
-                        color_index: str,
-                        color_style: str,
-                        max_len_value: int,
-                        len_index: int,
-                        style : str,
-                        withlvl: bool,
-                        start_line: str,
-                        end_line: str,
-                        top_line: str,
-                        bottom_line: str,
-                        middle_vertical_line: str,
-                        middle_horizontal_line: str,
-                        level_space: int = 3
-                        ) -> None:
-    """
-    The matrix has been printed in a box or semibox style.
-
-    Parameters
-    ----------
-    matrix : Iterable object
-        An iterable object to print
-
-    header : List[str], optional
-        If the matrix has a header to print with them, by default None
-
-    indexes : List[str] | str, optional
-        A list of strings if is a presonalized index name,
-        - `all` to show number index for row and columns, only show the index for columns if the
-        header are empty (`None`)
-        - `row` to show the index of the row,
-        - `col` to show the index of the column
-        - `None` do not show any index, by default `all`
-
-    nan_format : str, optional
-        The formatted string to print a NaN/None value, by default ''
-
-    color : str, optional
-        The color of the matrix items, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
-        by default has no color
-
-    color_index : str, optional
-        The color of the index, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
-        by default has no color
-
-    color_style : str, optional
-        The color style to print the matrix, for example the grid lines,
-        the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
-        by default has no color
-
-    max_len_value : int
-        Longest value of the array
-
-    len_index : int
-        Longest index of the array
-
-    style : str, optional
-        The style to print the matrix, by default `box`
-        - `box` Borders around the matrix
-        - `semibox` Borders at the top and left of the matrix
-
-    withlvl : bool, optional
-        True if the matrix should be printed with the current indentation False in otherwise
-    """
-    indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
-
-    if header:
-        __print_matrix_header(header=header,
-                              len_index=len_index,
-                              color_index=color_index,
-                              extra_spacing='',
-                              withlvl=withlvl,
-                              max_len_value=max_len_value,
-                              lvl_space=level_space
-                              )
-
-    if top_line is not None and top_line != '':
-        println(top_line, color=color_style, withlvl=False)
-
-    for index_row_id, row in enumerate(matrix):
-        __print_matrix_row(row = row,
-                           max_len_value = max_len_value,
-                           color = color,
-                           nan_format = nan_format,
-                           color_style = color_style,
-                           color_index = color_index,
-                           end_line = end_line,
-                           start_line = start_line,
-                           index_name = f'{indexes[index_row_id]: >{len_index}}' if indexes is not None else '',
-                           indentation = indentation
-                           )
-
-    if bottom_line is not None and bottom_line != '':
-        println(bottom_line, color=color_style, withlvl=False)
-
 def print_matrix(matrix,
                  header: Union[List[str], str] = 'all',
                  indexes: Union[List[str], str] = 'all',
@@ -1229,7 +1242,7 @@ def print_matrix(matrix,
         - `box` Borders around the matrix
         - `semibox` Borders at the top and left of the matrix
         - `numpy` or `np` Has been printed like a NumPy matrix
-        - `simpleline` or `sl` Only the grid lines of the matrix based on single lines of
+        - `simpleline` or `line` or `sl` Only the grid lines of the matrix based on single lines of
            term.emojis.Line
         - `doubleline` or `dl` Only the grid lines of the matrix based on double lines of
            term.emojis.Line
