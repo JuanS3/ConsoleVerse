@@ -46,6 +46,7 @@ import os
 
 from consoleverse.config import lang
 from consoleverse.term import *
+from consoleverse.exceptions import *
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -272,7 +273,7 @@ def _colorize(text: str,
     colorized_text = f'{ctext}{cbaground}{stext}{text}'
 
     if reset_console_colors:
-        colorized_text += ctext.reset()
+        colorized_text += ColorText().reset()
 
     return colorized_text
 
@@ -328,12 +329,11 @@ def println(*message: Any,
     if withlvl:
         message = _ConsoleConfig._indentation_lvl + message
 
-    reset_console_colors: str = reset_colors() if reset_all_colors or _ConsoleConfig._autoreset_colors else ''
     colorized_text: str = _colorize(text=message,
                                     color=color,
                                     bg_color=bg_color,
                                     style=style,
-                                    reset_console_colors=reset_console_colors
+                                    reset_console_colors=reset_all_colors
                                     )
     print(colorized_text, end=endl)
 
@@ -1304,10 +1304,13 @@ def print_matrix(matrix,
         __print_matrix_box_style(**kwargs)
     elif style in ('numpy', 'np'):
         __print_matrix_numpy_style(**kwargs)
-    elif style in ('simpleline', 'sl'):
+    elif style in ('simpleline', 'sl', 'line'):
         __print_matrix_simpleline_style(**kwargs)
     elif style in ('doubleline', 'dl'):
         __print_matrix_doubleline_style(**kwargs)
+    else:
+        # TODO: language support
+        raise ErrorNotDefinedStyle(f'Unknown style: {style}')
 
 
 def inputln(*message: Any,
