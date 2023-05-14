@@ -2,8 +2,8 @@ from setuptools import setup, find_packages
 
 
 setup(
-    name='consoleverse',
-    version='0.1',
+    name='ConsoleVerse',
+    version='0.0.1',
     description='A Python library for managing console output',
     long_description=open('README.md', 'r').read(),
     long_description_content_type='text/markdown',
