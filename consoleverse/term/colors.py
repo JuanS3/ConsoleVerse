@@ -37,8 +37,11 @@ The following are the available background colors:
 
 The following are the available text styles:
     - BOLD
+    - DIM
     - UNDERLINE
-    - REVERSED
+    - BLINK
+    - REVERSE
+    - HIDDEN
 """
 
 from consoleverse.term.exceptions.ex_colors import (
@@ -224,7 +227,7 @@ class StyleTextCode(_ColorBase):
     UNDERLINE_CODE: int  = 4
     BLINK_CODE: int      = 5
     REVERSE_CODE: int    = 7
-    CONCEAL_CODE: int    = 8
+    HIDDEN_CODE: int    = 8
 
 
 class StyleText(StyleTextCode):
@@ -243,14 +246,14 @@ class StyleText(StyleTextCode):
         - UNDERLINE
         - BLINK
         - REVERSE
-        - CONCEAL
+        - HIDDEN
     """
     BOLD      = 'BOLD'
     DIM       = 'DIM'
     UNDERLINE = 'UNDERLINE'
     BLINK     = 'BLINK'
     REVERSE   = 'REVERSE'
-    CONCEAL   = 'CONCEAL'
+    HIDDEN    = 'HIDDEN'
 
     def __init__(self):
         self.STYLES = {
@@ -259,7 +262,7 @@ class StyleText(StyleTextCode):
             self.UNDERLINE : self.start(self.UNDERLINE_CODE),
             self.BLINK     : self.start(self.BLINK_CODE),
             self.REVERSE   : self.start(self.REVERSE_CODE),
-            self.CONCEAL   : self.start(self.CONCEAL_CODE),
+            self.HIDDEN    : self.start(self.HIDDEN_CODE),
         }
 
         self.STYLES_LIST = list(self.STYLES.keys())
