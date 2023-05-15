@@ -200,11 +200,15 @@ class ColorBackground(ColorBackgroundCode):
 
     def __getitem__(self, background):
         try:
+            if 'BG_' not in background:
+                background = f'BG_{background}'
             return self.BACKGROUNDS[background.upper()]
         except KeyError:
             raise ColorBackgroundError(background)
 
     def __contains__(self, background):
+        if 'BG_' not in background:
+                background = f'BG_{background}'
         return background.upper() in self.BACKGROUNDS
 
     def __str__(self):
