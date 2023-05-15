@@ -220,6 +220,7 @@ class StyleTextCode(_ColorBase):
     This class is used to store the style codes for the text.
     """
     BOLD_CODE: int       = 1
+    DIM_CODE: int        = 2
     UNDERLINE_CODE: int  = 4
     BLINK_CODE: int      = 5
     REVERSE_CODE: int    = 7
@@ -245,6 +246,7 @@ class StyleText(StyleTextCode):
         - CONCEAL
     """
     BOLD      = 'BOLD'
+    DIM       = 'DIM'
     UNDERLINE = 'UNDERLINE'
     BLINK     = 'BLINK'
     REVERSE   = 'REVERSE'
@@ -253,6 +255,7 @@ class StyleText(StyleTextCode):
     def __init__(self):
         self.STYLES = {
             self.BOLD      : self.start(self.BOLD_CODE),
+            self.DIM       : self.start(self.DIM_CODE),
             self.UNDERLINE : self.start(self.UNDERLINE_CODE),
             self.BLINK     : self.start(self.BLINK_CODE),
             self.REVERSE   : self.start(self.REVERSE_CODE),
