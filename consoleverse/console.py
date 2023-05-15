@@ -1375,3 +1375,96 @@ def inputln(*message: Any,
     )
 
     return input_type(input())
+
+
+# TODO: docstring
+# TODO: add support for the personalized border style
+# TODO: add support text alignment
+def textbox(*message: Any,
+            withlvl: bool = True,
+            color: str = '',
+            bg_color: str = '',
+            reset_all_colors: bool = True,
+            style: str = '',
+            sep: str = ' ',
+            border: str = 'simpleline',
+            border_color: str = '',
+            border_style: str = '',
+            ) -> None:
+    """
+    Print the message to the console, the `endl` is the same as `end` in print function
+    and is necessary print the message with the current indentation level and the color
+    indicate.
+
+    Parameters
+    ----------
+    message : Any
+        Message to print to console
+
+    withlvl : bool, optional
+        True if the message should be printed with the current indentation
+        False is not necessary, by default `True`
+
+    color : str, optional
+        The color of the message, the color must be one of the `COLORS_LIST`
+        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        by default has no color
+
+    bg_color : str, optional
+        The background color of the message, the color must be one of the `BACKGROUNS_LIST`
+        or `COLORS_LIST` for all colors available; by default has no color
+
+    reset_all_colors : bool, optional
+        True to reset all colors, False is not necessary, by default `True`
+
+    style : str, optional
+        The style of the message, the style must be one of the `STYLES_LIST`,
+        by default has no style
+
+    sep : str, optional
+        The separator between the values, by default is a space
+
+    border : str, optional
+        The style of the border, the style must be one of the `STYLES_LIST`,
+        by default is `simpleline`
+    """
+    message = __to_string(*message, sep=sep)
+    lines = message.split('\n')
+
+    max_len = max([len(line) for line in lines])
+
+    if border == 'simpleline':
+        top = Line.STL + Line.SH * (max_len + 2) + Line.STR
+        bottom = Line.SBL + Line.SH * (max_len + 2) + Line.SBR
+        vertical_blank = Line.SV + ' ' * (max_len + 2) + Line.SV
+        vertical = Line.SV
+    elif border == 'doubleline':
+        top = Line.DTL + Line.DH * (max_len + 2) + Line.DTR
+        bottom = Line.DBL + Line.DH * (max_len + 2) + Line.DBR
+        vertical_blank = Line.DV + ' ' * (max_len + 2) + Line.DV
+        vertical = Line.DV
+    else:
+        # TODO: language support
+        raise ErrorNotDefinedStyle(f'Unknown border style: {border}')
+
+    pln = lambda s: println(s, withlvl=withlvl, color=border_color, style=border_style)
+
+    pln(top)
+    pln(vertical_blank)
+
+    for line in lines:
+        println(vertical, withlvl=withlvl, color=border_color, style=border_style, endl='')
+        println(
+            ' ' + line + ' ',
+            withlvl=False,
+            color=color,
+            bg_color=bg_color,
+            reset_all_colors=reset_all_colors,
+            style=style,
+            endl=''
+        )
+        println(' ' * (max_len - len(line)), withlvl=False, endl='')
+        println(vertical, withlvl=False, color=border_color, style=border_style)
+
+    pln(vertical_blank)
+    pln(bottom)
