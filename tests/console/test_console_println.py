@@ -458,3 +458,39 @@ class TestConsolePrintln(unittest.TestCase):
         with patch('builtins.print') as mock_print:
             console.println('Hello', 'ConsoleVerse!', 123, True, None, sep='~', endl='')
             mock_print.assert_called_once_with('Hello~ConsoleVerse!~123~True~None\x1b[0m', end='')
+
+    def test_println_vs_python_print_multiple_args_separator_end_color(self):
+        """
+        Test that console.println() with multiple arguments, a separator, and an end produces the same output as print().
+
+        This test verifies that the output of console.println() with multiple arguments, a separator, and an end
+        matches the output of the print() function with the same multiple arguments, separator, and end.
+        """
+        with patch('builtins.print') as mock_print:
+            console.println('Hello', 'ConsoleVerse!', 123, True, None, sep='~', endl='', color='red')
+            mock_print.assert_called_once_with('\x1b[31mHello~ConsoleVerse!~123~True~None\x1b[0m', end='')
+
+    @unittest.skip('Fix console.println() to support color with bg_color and style.')
+    def test_println_vs_python_print_multiple_args_separator_end_color_bgcolor(self):
+        """
+        Test that console.println() with multiple arguments, a separator, and an end produces the same output as print().
+
+        This test verifies that the output of console.println() with multiple arguments, a separator, and an end
+        matches the output of the print() function with the same multiple arguments, separator, and end.
+        """
+        with patch('builtins.print') as mock_print:
+            console.println('Hello', 'ConsoleVerse!', 123, True, None, sep='~', endl='', color='red', bgcolor='blue')
+            mock_print.assert_called_once_with('\x1b[31;44mHello~ConsoleVerse!~123~True~None\x1b[0m', end='')
+
+    @unittest.skip('Fix console.println() to support color with bg_color and style.')
+    def test_println_vs_python_print_multiple_args_separator_end_color_bgcolor_style(self):
+        """
+        Test that console.println() with multiple arguments, a separator, and an end produces the same output as print().
+
+        This test verifies that the output of console.println() with multiple arguments, a separator, and an end
+        matches the output of the print() function with the same multiple arguments, separator, and end.
+        """
+        with patch('builtins.print') as mock_print:
+            console.println('Hello', 'ConsoleVerse!', 123, True, None, sep='~', endl='', color='red', bgcolor='blue', style='bold')
+            mock_print.assert_called_once_with('\x1b[31;44;1mHello~ConsoleVerse!~123~True~None\x1b[0m', end='')
+
