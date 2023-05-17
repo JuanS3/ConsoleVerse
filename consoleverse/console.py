@@ -1469,3 +1469,63 @@ def textbox(*message: Any,
 
     pln(vertical_blank)
     pln(bottom)
+
+def progress_bar(progress: float,
+                 width: int = 50,
+                 bar: str = '#',
+                 start_bar: str = '[',
+                 end_bar: str = ']',
+                 spacing: str = '.',
+                 pct: bool = True,
+                 **kwargs
+                 ) -> None:
+    """
+    Print a progress bar to the console.
+
+    Parameters
+    ----------
+    progress : float
+        The progress of the bar, the value must be between 0 and 1
+
+    width : int, optional
+        The width of the bar, by default is 50
+
+    bar : str, optional
+        The character to use for the bar, by default is `#`
+
+    start_bar : str, optional
+        The character to use for the start of the bar, by default is `[`
+
+    end_bar : str, optional
+        The character to use for the end of the bar, by default is `]`
+
+    spacing : str, optional
+        The character to use for the spacing, by default is `.`
+
+    pct : bool, optional
+        True to print the percentage, False otherwise, by default is `True`
+    """
+
+    if progress < 0 or progress > 1:
+        raise ValueError('The progress must be between 0 and 1')
+
+    if width < 0:
+        raise ValueError('The width must be greater than 0')
+
+    if len(bar) != 1:
+        raise ValueError('The bar must be a single character')
+
+    if len(start_bar) != 1:
+        raise ValueError('The start_bar must be a single character')
+
+    if len(end_bar) != 1:
+        raise ValueError('The end_bar must be a single character')
+
+    progress_bar = int(progress * width)
+    pct_bar = ' (' + str(int(progress * 100)) + '%)' if pct else ''
+
+    println(
+        start_bar + bar * progress_bar + spacing * (width - progress_bar) + end_bar + pct_bar,
+        **kwargs
+    )
+
