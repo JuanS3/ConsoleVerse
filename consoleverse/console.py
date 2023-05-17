@@ -18,6 +18,7 @@ Functions:
 - print_color_list(): Prints a list of supported colors to the console.
 - print_style_list(): Prints a list of supported text styles to the console.
 - print_matrix(...): Prints a matrix to the console.
+- textbox(...): Prints a textbox to the console.
 
 Constants:
 - NAME: The name of the module.
