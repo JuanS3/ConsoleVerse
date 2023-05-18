@@ -1529,3 +1529,55 @@ def progress_bar(progress: float,
         **kwargs
     )
 
+def print_tree(dictionary: dict,
+               style_tree: str = 'simple',
+               **kwargs
+               ) -> None:
+    """
+    Print a dictionary to the console in a tree style.
+
+    Parameters
+    ----------
+    dictionary : dict
+        The dictionary to print
+
+    style_dict : str, optional
+        The style of the dictionary, the style must be one of the `STYLES_LIST`,
+        by default is `simple`
+
+    Examples
+    --------
+    >>> print_tree({'a': 1, 'b': 2, 'c': 3})
+    ... ┌ a
+    ... │ └─ 1
+    ... ├ b
+    ... │ └─ 2
+    ... └ c
+    ...   └─ 3
+
+    >>> print_tree({'a': 1, 'b': {'a': 1, 'b': 2}, 'c': 3}, style_dict='doubleline')
+    ... ╔ a
+    ... ║ ╚═ 1
+    ... ╠ b
+    ... ║ ╠ a
+    ... ║ ║ ╚═ 1
+    ... ║ ╚ b
+    ... ║   ╚═ 2
+    ... ╚ c
+    ...   ╚═ 3
+    """
+    if style_tree == 'simple':
+        upper_left = '┌'
+        vertical = '│'
+        horizontal = '─'
+        vertical_and_right = '├'
+    elif style_tree == 'doubleline':
+        upper_left = '╔'
+        vertical = '║'
+        horizontal = '═'
+        vertical_and_right = '╠'
+    else:
+        # TODO: language support
+        raise ErrorNotDefinedStyle(f'Unknown style: {style_tree}')
+
+    # TODO: implement
