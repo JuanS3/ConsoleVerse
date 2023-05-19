@@ -1529,12 +1529,13 @@ def progress_bar(progress: float,
         **kwargs
     )
 
-def print_tree(dictionary: dict,
+def print_tree(tree: dict,
                style_tree: str = 'simple',
-               **kwargs
+               color_tree: str = '',
+               **println_options
                ) -> None:
     """
-    Print a dictionary to the console in a tree style.
+    Print a tree to the console in a tree style.
 
     Parameters
     ----------
@@ -1548,36 +1549,96 @@ def print_tree(dictionary: dict,
     Examples
     --------
     >>> print_tree({'a': 1, 'b': 2, 'c': 3})
-    ... ┌ a
-    ... │ └─ 1
-    ... ├ b
-    ... │ └─ 2
-    ... └ c
-    ...   └─ 3
+    ... ┌─ a
+    ... │  └─ 1
+    ... ├─ b
+    ... │  └─ 2
+    ... └─ c
+    ...    └─ 3
 
     >>> print_tree({'a': 1, 'b': {'a': 1, 'b': 2}, 'c': 3}, style_dict='doubleline')
-    ... ╔ a
-    ... ║ ╚═ 1
-    ... ╠ b
-    ... ║ ╠ a
-    ... ║ ║ ╚═ 1
-    ... ║ ╚ b
-    ... ║   ╚═ 2
-    ... ╚ c
-    ...   ╚═ 3
+    ... ╔═ a
+    ... ║  ╚═ 1
+    ... ╠═ b
+    ... ║  ╠═ a
+    ... ║  ║  ╚═ 1
+    ... ║  ╚═ b
+    ... ║     ╚═ 2
+    ... ╚═ c
+    ...    ╚═ 3
     """
-    if style_tree == 'simple':
-        upper_left = '┌'
-        vertical = '│'
-        horizontal = '─'
-        vertical_and_right = '├'
-    elif style_tree == 'doubleline':
-        upper_left = '╔'
-        vertical = '║'
-        horizontal = '═'
-        vertical_and_right = '╠'
-    else:
+    STYLE_TREE = {
+        'simple': {
+            'upper_left': Line.STL,
+            'down_left': Line.SBL,
+            'vertical': Line.SV,
+            'horizontal': Line.SH,
+            'vertical_and_right': Line.SL
+        },
+        'doubleline': {
+            'upper_left': Line.DTL,
+            'down_left': Line.DBL,
+            'vertical': Line.DV,
+            'horizontal': Line.DH,
+            'vertical_and_right': Line.DL
+        }
+    }
+    style = STYLE_TREE.get(style_tree)
+    if style is None:
         # TODO: language support
         raise ErrorNotDefinedStyle(f'Unknown style: {style_tree}')
 
-    # TODO: implement
+    upper_left = style['upper_left']
+    down_left = style['down_left']
+    vertical = style['vertical']
+    horizontal = style['horizontal']
+    vertical_and_right = style['vertical_and_right']
+
+    def recursive_print_tree(
+            sub_tree: dict,
+            level: int = 0,
+            start_bar: str = ''
+        ):
+        """
+        Print a tree to the console in a tree style.
+
+        Parameters
+        ----------
+        sub_tree : dict
+            The dictionary to print
+
+        level : int, optional
+            The level of the tree, by default is 0
+
+        start_bar : str, optional
+            The start bar of the tree, by default is ''
+        """
+        for i, (k, v) in enumerate(sub_tree.items()):
+            bar = ''
+            if   i == 0 and level != 0 and len(sub_tree) > 1:
+                bar = f'{vertical_and_right}{horizontal}'
+            elif i == 0 and level == 0 and len(sub_tree) > 1 :
+                bar = f'{upper_left}{horizontal}'
+            elif i == 0 and len(sub_tree) == 1:
+                bar = f'{down_left}{horizontal}'
+            elif i == len(sub_tree) - 1:
+                bar = f'{down_left}{horizontal}'
+            else:
+                bar = f'{vertical_and_right}{horizontal}'
+
+            println(f'{start_bar}{bar}', color=color_tree, endl=' ')
+            println(k, **println_options)
+
+            if isinstance(v, dict):
+                if i == len(sub_tree) - 1:
+                    new_start_bar = f'{start_bar}  '
+                else:
+                    new_start_bar = f'{start_bar}{vertical}  '
+                recursive_print_tree(v, level + 1, start_bar=new_start_bar)
+            else:
+                last_lvl = ' ' if i == len(sub_tree) - 1 else vertical
+                bar = f'{start_bar}{last_lvl}  {down_left}{horizontal}'
+                println(bar, color=color_tree, endl=' ')
+                println(v, **println_options)
+
+    recursive_print_tree(tree)
