@@ -1642,3 +1642,70 @@ def print_tree(tree: dict,
                 println(v, **println_options)
 
     recursive_print_tree(tree)
+
+def bar_char(
+        data: list[int] | dict,
+        colors: list[str],
+        colums: list[str] = None,
+        title: str = '',
+        title_color: str = '',
+        title_style: str = '',
+        title_bg_color: str = '',
+        title_align: str = 'center',
+        x_label: str = '',
+        x_label_color: str = '',
+        x_label_style: str = '',
+        x_label_bg_color: str = ''
+    ) -> None:
+    """
+    Print a bar chart to the console.
+
+    Parameters
+    ----------
+    data : Union(list[int], dict)
+        The data to print
+
+    colors : list[str]
+        The colors of the bars
+
+    colums : list[str], optional
+        The colums of the data, by default is None
+    """
+
+    normalize = lambda value: int(value / max(data) * 10)
+    colorize = lambda text, color: _colorize(text, color=color, style='', bg_color='', reset_console_colors=True)
+    data_norm = [normalize(value) for value in data]
+
+    max_value = max(data_norm)
+    num_values = len(data)
+    bar = '███ '
+    len_bar = len(bar)
+
+
+    new_line()
+    new_line()
+
+    if title:
+        if title_align in ('center', 'c'):
+            title = title.center(num_values * len_bar)
+        elif title_align in ('left', 'l'):
+            title = title.ljust(num_values * len_bar)
+        elif title_align in ('right', 'r'):
+            title = title.rjust(num_values * len_bar)
+
+        println(title, color=title_color, style=title_style, bg_color=title_bg_color)
+        new_line()
+
+    for i in range(max_value, 0, -1):
+        line = ''
+        for j, value in enumerate(data_norm):
+            if value >= i:
+                line += colorize(bar, colors[j])
+            else:
+                line += ' ' * len_bar
+        println(line, color=colors[j])
+
+    println('-' * (num_values * len_bar))
+    println(' '.join(colorize(str(value).center(len_bar - 1), colors[i]) for i, value in enumerate(data)))
+
+    new_line()
