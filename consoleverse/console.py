@@ -1643,7 +1643,7 @@ def print_tree(tree: dict,
 
     recursive_print_tree(tree)
 
-def bar_char(
+def bar_chart(
         data: list[int] | dict,
         colors: list[str],
         colums: list[str] = None,
