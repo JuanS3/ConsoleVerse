@@ -68,10 +68,11 @@ __END_LANGS = {
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 # ~~                         decorators                         ~~ #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-def block(message_block: Union[str, dict],
-          text_color: str = 'BLUE',
-          bg_color: str = ''
-          ) -> Callable[..., Any]:
+def block(
+        message_block: Union[str, dict],
+        text_color: str = 'BLUE',
+        bg_color: str = ''
+    ) -> Callable[..., Any]:
     """
     Decorator to create a block of text.
 
@@ -230,12 +231,13 @@ def del_lvl():
     _ConsoleConfig.del_indentation_lvl()
 
 
-def _colorize(text: str,
-              color: str,
-              bg_color: str,
-              style: str,
-              reset_console_colors: bool,
-              ) -> str:
+def _colorize(
+        text: str,
+        color: str,
+        bg_color: str,
+        style: str,
+        reset_console_colors: bool,
+    ) -> str:
     """
     Colorize the text
 
@@ -279,15 +281,16 @@ def _colorize(text: str,
     return colorized_text
 
 
-def println(*message: Any,
-            endl: str = '\n',
-            withlvl: bool = True,
-            color: str = '',
-            bg_color: str = '',
-            reset_all_colors: bool = True,
-            style: str = '',
-            sep: str = ' '
-            ) -> None:
+def println(
+        *message: Any,
+        endl: str = '\n',
+        withlvl: bool = True,
+        color: str = '',
+        bg_color: str = '',
+        reset_all_colors: bool = True,
+        style: str = '',
+        sep: str = ' '
+    ) -> None:
     """
     Print the message to the console, the `endl` is the same as `end` in print function
     and is necessary print the message with the current indentation level and the color
@@ -366,11 +369,12 @@ def start_block(*message: Any, color: str = 'BLUE', bg_color: str = '') -> None:
     add_lvl()
 
 
-def end_block(*message: Any,
-              color: str = 'BLUE',
-              bg_color: str = '',
-              style: str = ''
-              ) -> None:
+def end_block(
+        *message: Any,
+        color: str = 'BLUE',
+        bg_color: str = '',
+        style: str = ''
+    ) -> None:
     """
     End a block of messages
 
@@ -398,11 +402,12 @@ def end_block(*message: Any,
     new_line()
 
 
-def warning(*message: Any,
-            color: str = 'BLUE',
-            bg_color: str = '',
-            style: str = ''
-            ) -> None:
+def warning(
+        *message: Any,
+        color: str = 'BLUE',
+        bg_color: str = '',
+        style: str = ''
+    ) -> None:
     """
     Warning message starts with 'warning: {message}'
 
@@ -424,11 +429,12 @@ def warning(*message: Any,
     println(f'warning: {message}', color=color, bg_color=bg_color, style=style)
 
 
-def error(*message: Any,
-          color: str = 'RED',
-          bg_color: str = '',
-          style: str = ''
-          ) -> None:
+def error(
+        *message: Any,
+        color: str = 'RED',
+        bg_color: str = '',
+        style: str = ''
+    ) -> None:
     """
     Error message is displayed like `error: >>> {message} <<<`
 
@@ -457,12 +463,13 @@ def new_line():
     println('', withlvl=False)
 
 
-def line(size: int = 30,
-         style: str = '-- ',
-         color: str = '',
-         bg_color: str = '',
-         style_text: str = ''
-         ) -> None:
+def line(
+        size: int = 30,
+        style: str = '-- ',
+        color: str = '',
+        bg_color: str = '',
+        style_text: str = ''
+    ) -> None:
     """
     Display a line in the console like this `-- -- -- -- -- -- --`
     whit the indicated size
@@ -526,14 +533,15 @@ def __max_len_value(matrix, nan_format) -> int:
     return max_len
 
 
-def __print_matrix_header(header: List[str],
-                          len_index: int,
-                          color_index: str,
-                          extra_spacing: str,
-                          withlvl: bool,
-                          max_len_value: int,
-                          lvl_space: int = 3
-                          ) -> None:
+def __print_matrix_header(
+        header: List[str],
+        len_index: int,
+        color_index: str,
+        extra_spacing: str,
+        withlvl: bool,
+        max_len_value: int,
+        lvl_space: int = 3
+    ) -> None:
     """
     Print the header of the matrix
 
@@ -570,17 +578,18 @@ def __print_matrix_header(header: List[str],
     new_line()
 
 
-def __print_matrix_row(row: list,
-                       max_len_value: int,
-                       color: str,
-                       nan_format: str,
-                       color_style: str,
-                       color_index: str,
-                       end_line: str,
-                       start_line: str,
-                       index_name: str,
-                       indentation: str
-                       ) -> None:
+def __print_matrix_row(
+        row: list,
+        max_len_value: int,
+        color: str,
+        nan_format: str,
+        color_style: str,
+        color_index: str,
+        end_line: str,
+        start_line: str,
+        index_name: str,
+        indentation: str
+    ) -> None:
     """
     Printed the row of the matrix.
 
@@ -630,25 +639,26 @@ def __print_matrix_row(row: list,
     println(end_line, color=color_style, withlvl=False)
 
 
-def __print_matrix_base(matrix,
-                        header: List[str],
-                        indexes: Union[List[str], str],
-                        nan_format: str,
-                        color: str,
-                        color_index: str,
-                        color_style: str,
-                        max_len_value: int,
-                        len_index: int,
-                        style : str,
-                        withlvl: bool,
-                        start_line: str,
-                        end_line: str,
-                        top_line: str,
-                        bottom_line: str,
-                        middle_vertical_line: str,
-                        middle_horizontal_line: str,
-                        level_space: int = 3
-                        ) -> None:
+def __print_matrix_base(
+        matrix,
+        header: List[str],
+        indexes: Union[List[str], str],
+        nan_format: str,
+        color: str,
+        color_index: str,
+        color_style: str,
+        max_len_value: int,
+        len_index: int,
+        style : str,
+        withlvl: bool,
+        start_line: str,
+        end_line: str,
+        top_line: str,
+        bottom_line: str,
+        middle_vertical_line: str,
+        middle_horizontal_line: str,
+        level_space: int = 3
+    ) -> None:
     """
     The matrix has been printed in a box or semibox style.
 
@@ -754,18 +764,19 @@ def __print_matrix_base(matrix,
         println(bottom_line, color=color_style, withlvl=False)
 
 
-def __print_matrix_box_style(matrix,
-                             header: List[str],
-                             indexes: Union[List[str], str],
-                             nan_format: str,
-                             color: str,
-                             color_index: str,
-                             color_style: str,
-                             max_len_value: int,
-                             len_index: int,
-                             style : str,
-                             withlvl: bool
-                             ) -> None:
+def __print_matrix_box_style(
+        matrix,
+        header: List[str],
+        indexes: Union[List[str], str],
+        nan_format: str,
+        color: str,
+        color_index: str,
+        color_style: str,
+        max_len_value: int,
+        len_index: int,
+        style : str,
+        withlvl: bool
+    ) -> None:
     """
     The matrix has been printed in a box or semibox style.
 
@@ -822,38 +833,40 @@ def __print_matrix_box_style(matrix,
     spaces: str = ' ' * (len_index + 3)
     indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
 
-    __print_matrix_base(matrix=matrix,
-                        header=header,
-                        indexes=indexes,
-                        nan_format=nan_format,
-                        color=color,
-                        color_index=color_index,
-                        color_style=color_style,
-                        max_len_value=max_len_value,
-                        len_index=len_index,
-                        style=style,
-                        withlvl=withlvl,
-                        start_line=' | ',
-                        end_line=f' | ' if style == 'box' else '',
-                        top_line=f'{indentation}{spaces}{div}',
-                        bottom_line=f'{indentation}{spaces}{div}' if style == 'box' else new_line(),
-                        middle_vertical_line=None,
-                        middle_horizontal_line=None
-                        )
+    __print_matrix_base(
+        matrix=matrix,
+        header=header,
+        indexes=indexes,
+        nan_format=nan_format,
+        color=color,
+        color_index=color_index,
+        color_style=color_style,
+        max_len_value=max_len_value,
+        len_index=len_index,
+        style=style,
+        withlvl=withlvl,
+        start_line=' | ',
+        end_line=f' | ' if style == 'box' else '',
+        top_line=f'{indentation}{spaces}{div}',
+        bottom_line=f'{indentation}{spaces}{div}' if style == 'box' else new_line(),
+        middle_vertical_line=None,
+        middle_horizontal_line=None
+    )
 
 
-def __print_matrix_numpy_style(matrix,
-                               header: List[str],
-                               indexes: Union[List[str], str],
-                               style: str,
-                               nan_format: str,
-                               color: str,
-                               color_index: str,
-                               color_style: str,
-                               max_len_value: int,
-                               len_index: int,
-                               withlvl: bool
-                               ) -> None:
+def __print_matrix_numpy_style(
+        matrix,
+        header: List[str],
+        indexes: Union[List[str], str],
+        style: str,
+        nan_format: str,
+        color: str,
+        color_index: str,
+        color_style: str,
+        max_len_value: int,
+        len_index: int,
+        withlvl: bool
+    ) -> None:
     """
     The matrix has been printed in a box or semibox style.
 
@@ -921,31 +934,33 @@ def __print_matrix_numpy_style(matrix,
         else:
             println('  ', indentation, endl='', withlvl=False)
 
-        __print_matrix_row(row = row,
-                           max_len_value = max_len_value,
-                           color = color,
-                           nan_format = nan_format,
-                           color_style = color_style,
-                           color_index = color_index,
-                           end_line = ' ]' if max_rows != index_row_id + 1 else ' ]  ]',
-                           start_line = ' [ ',
-                           index_name = f'{indexes[index_row_id]: >{len_index}}' if indexes is not None else '',
-                           indentation = indentation
-                           )
+        __print_matrix_row(
+            row = row,
+            max_len_value = max_len_value,
+            color = color,
+            nan_format = nan_format,
+            color_style = color_style,
+            color_index = color_index,
+            end_line = ' ]' if max_rows != index_row_id + 1 else ' ]  ]',
+            start_line = ' [ ',
+            index_name = f'{indexes[index_row_id]: >{len_index}}' if indexes is not None else '',
+            indentation = indentation
+        )
 
 
-def __print_matrix_without_style(matrix,
-                                 header: List[str],
-                                 indexes: Union[List[str], str],
-                                 style: str,
-                                 nan_format: str,
-                                 color: str,
-                                 color_index: str,
-                                 color_style: str,
-                                 max_len_value: int,
-                                 len_index: int,
-                                 withlvl: bool
-                                 ) -> None:
+def __print_matrix_without_style(
+        matrix,
+        header: List[str],
+        indexes: Union[List[str], str],
+        style: str,
+        nan_format: str,
+        color: str,
+        color_index: str,
+        color_style: str,
+        max_len_value: int,
+        len_index: int,
+        withlvl: bool
+    ) -> None:
     """
     The matrix has been printed in a box or semibox style.
 
@@ -993,39 +1008,41 @@ def __print_matrix_without_style(matrix,
     withlvl : bool, optional
         True if the matrix should be printed with the current indentation False in otherwise
     """
-    __print_matrix_base(matrix=matrix,
-                        header=header,
-                        indexes=indexes,
-                        nan_format=nan_format,
-                        color=color,
-                        color_index=color_index,
-                        color_style=color_style,
-                        max_len_value=max_len_value,
-                        len_index=len_index,
-                        style=style,
-                        withlvl=withlvl,
-                        start_line='',
-                        end_line='',
-                        top_line='',
-                        bottom_line='',
-                        middle_vertical_line=None,
-                        middle_horizontal_line=None,
-                        level_space=0
-                        )
+    __print_matrix_base(
+        matrix=matrix,
+        header=header,
+        indexes=indexes,
+        nan_format=nan_format,
+        color=color,
+        color_index=color_index,
+        color_style=color_style,
+        max_len_value=max_len_value,
+        len_index=len_index,
+        style=style,
+        withlvl=withlvl,
+        start_line='',
+        end_line='',
+        top_line='',
+        bottom_line='',
+        middle_vertical_line=None,
+        middle_horizontal_line=None,
+        level_space=0
+    )
 
 
-def __print_matrix_simpleline_style(matrix,
-                                    header: List[str],
-                                    indexes: Union[List[str], str],
-                                    nan_format: str,
-                                    color: str,
-                                    color_index: str,
-                                    color_style: str,
-                                    max_len_value: int,
-                                    len_index: int,
-                                    style : str,
-                                    withlvl: bool
-                                    ) -> None:
+def __print_matrix_simpleline_style(
+        matrix,
+        header: List[str],
+        indexes: Union[List[str], str],
+        nan_format: str,
+        color: str,
+        color_index: str,
+        color_style: str,
+        max_len_value: int,
+        len_index: int,
+        style : str,
+        withlvl: bool
+    ) -> None:
     """
     The matrix has been printed in a box or semibox style.
 
@@ -1082,24 +1099,25 @@ def __print_matrix_simpleline_style(matrix,
     spaces: str = ' ' * (len_index + 1)
     indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
 
-    __print_matrix_base(matrix=matrix,
-                        header=header,
-                        indexes=indexes,
-                        nan_format=nan_format,
-                        color=color,
-                        color_index=color_index,
-                        color_style=color_style,
-                        max_len_value=max_len_value,
-                        len_index=len_index,
-                        style=style,
-                        withlvl=withlvl,
-                        start_line=f' {Line.SV} ',
-                        end_line=f' {Line.SV} ',
-                        top_line=f'{indentation}{spaces}{Line.STL}{div}{Line.STR}',
-                        bottom_line=f'{indentation}{spaces}{Line.SBL}{div}{Line.SBR}',
-                        middle_vertical_line=None,
-                        middle_horizontal_line=None
-                        )
+    __print_matrix_base(
+        matrix=matrix,
+        header=header,
+        indexes=indexes,
+        nan_format=nan_format,
+        color=color,
+        color_index=color_index,
+        color_style=color_style,
+        max_len_value=max_len_value,
+        len_index=len_index,
+        style=style,
+        withlvl=withlvl,
+        start_line=f' {Line.SV} ',
+        end_line=f' {Line.SV} ',
+        top_line=f'{indentation}{spaces}{Line.STL}{div}{Line.STR}',
+        bottom_line=f'{indentation}{spaces}{Line.SBL}{div}{Line.SBR}',
+        middle_vertical_line=None,
+        middle_horizontal_line=None
+    )
 
 
 def __print_matrix_doubleline_style(matrix,
@@ -1170,36 +1188,38 @@ def __print_matrix_doubleline_style(matrix,
     spaces: str = ' ' * (len_index + 1)
     indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
 
-    __print_matrix_base(matrix=matrix,
-                        header=header,
-                        indexes=indexes,
-                        nan_format=nan_format,
-                        color=color,
-                        color_index=color_index,
-                        color_style=color_style,
-                        max_len_value=max_len_value,
-                        len_index=len_index,
-                        style=style,
-                        withlvl=withlvl,
-                        start_line=f' {Line.DV} ',
-                        end_line=f' {Line.DV} ',
-                        top_line=f'{indentation}{spaces}{Line.DTL}{div}{Line.DTR}',
-                        bottom_line=f'{indentation}{spaces}{Line.DBL}{div}{Line.DBR}',
-                        middle_vertical_line=None,
-                        middle_horizontal_line=None
-                        )
+    __print_matrix_base(
+        matrix=matrix,
+        header=header,
+        indexes=indexes,
+        nan_format=nan_format,
+        color=color,
+        color_index=color_index,
+        color_style=color_style,
+        max_len_value=max_len_value,
+        len_index=len_index,
+        style=style,
+        withlvl=withlvl,
+        start_line=f' {Line.DV} ',
+        end_line=f' {Line.DV} ',
+        top_line=f'{indentation}{spaces}{Line.DTL}{div}{Line.DTR}',
+        bottom_line=f'{indentation}{spaces}{Line.DBL}{div}{Line.DBR}',
+        middle_vertical_line=None,
+        middle_horizontal_line=None
+    )
 
 
-def print_matrix(matrix,
-                 header: Union[List[str], str] = 'all',
-                 indexes: Union[List[str], str] = 'all',
-                 style: str = 'box',
-                 nan_format: str = '',
-                 color: str = None,
-                 color_index: str = '',
-                 color_style: str = '',
-                 withlvl: bool = True
-                 ) -> None:
+def print_matrix(
+        matrix,
+        header: Union[List[str], str] = 'all',
+        indexes: Union[List[str], str] = 'all',
+        style: str = 'box',
+        nan_format: str = '',
+        color: str = None,
+        color_index: str = '',
+        color_style: str = '',
+        withlvl: bool = True
+    ) -> None:
     """
     Print a matrix in a pretty formatted
 
@@ -1314,16 +1334,17 @@ def print_matrix(matrix,
         raise ErrorNotDefinedStyle(f'Unknown style: {style}')
 
 
-def inputln(*message: Any,
-            endl: str = '',
-            input_type: type = str,
-            withlvl: bool = True,
-            color: str = '',
-            bg_color: str = '',
-            reset_all_colors: bool = True,
-            style: str = '',
-            sep: str = ' '
-            ) -> None:
+def inputln(
+        *message: Any,
+        endl: str = '',
+        input_type: type = str,
+        withlvl: bool = True,
+        color: str = '',
+        bg_color: str = '',
+        reset_all_colors: bool = True,
+        style: str = '',
+        sep: str = ' '
+    ) -> None:
     """
     A utility function that prompts the user to input data from the console,
     with support for customization of the prompt message appearance.
@@ -1381,17 +1402,18 @@ def inputln(*message: Any,
 # TODO: docstring
 # TODO: add support for the personalized border style
 # TODO: add support text alignment
-def textbox(*message: Any,
-            withlvl: bool = True,
-            color: str = '',
-            bg_color: str = '',
-            reset_all_colors: bool = True,
-            style: str = '',
-            sep: str = ' ',
-            border: str = 'simpleline',
-            border_color: str = '',
-            border_style: str = '',
-            ) -> None:
+def textbox(
+        *message: Any,
+        withlvl: bool = True,
+        color: str = '',
+        bg_color: str = '',
+        reset_all_colors: bool = True,
+        style: str = '',
+        sep: str = ' ',
+        border: str = 'simpleline',
+        border_color: str = '',
+        border_style: str = '',
+    ) -> None:
     """
     Print the message to the console, the `endl` is the same as `end` in print function
     and is necessary print the message with the current indentation level and the color
@@ -1470,15 +1492,16 @@ def textbox(*message: Any,
     pln(vertical_blank)
     pln(bottom)
 
-def progress_bar(progress: float,
-                 width: int = 50,
-                 bar: str = '#',
-                 start_bar: str = '[',
-                 end_bar: str = ']',
-                 spacing: str = '.',
-                 pct: bool = True,
-                 **kwargs
-                 ) -> None:
+def progress_bar(
+        progress: float,
+        width: int = 50,
+        bar: str = '#',
+        start_bar: str = '[',
+        end_bar: str = ']',
+        spacing: str = '.',
+        pct: bool = True,
+        **kwargs
+    ) -> None:
     """
     Print a progress bar to the console.
 
@@ -1529,11 +1552,12 @@ def progress_bar(progress: float,
         **kwargs
     )
 
-def print_tree(tree: dict,
-               style_tree: str = 'simple',
-               color_tree: str = '',
-               **println_options
-               ) -> None:
+def print_tree(
+        tree: dict,
+        style_tree: str = 'simple',
+        color_tree: str = '',
+        **println_options
+    ) -> None:
     """
     Print a tree to the console in a tree style.
 
