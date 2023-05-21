@@ -1647,6 +1647,7 @@ def bar_chart(
         data: list[int] | dict,
         colors: list[str],
         colums: list[str] = None,
+        bar: str = '███',
         title: str = '',
         title_color: str = '',
         title_style: str = '',
@@ -1670,6 +1671,9 @@ def bar_chart(
 
     colums : list[str], optional
         The colums of the data, by default is None
+
+    bar : str, optional
+        The bar to print, by default is '███'
     """
 
     normalize = lambda value: int(value / max(data) * 10)
@@ -1678,7 +1682,7 @@ def bar_chart(
 
     max_value = max(data_norm)
     num_values = len(data)
-    bar = '███ '
+    bar = f'{bar} '
     len_bar = len(bar)
 
 
