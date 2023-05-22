@@ -19,6 +19,9 @@ Functions:
 - print_style_list(): Prints a list of supported text styles to the console.
 - print_matrix(...): Prints a matrix to the console.
 - textbox(...): Prints a textbox to the console.
+- progress_bar(...): Prints a progress bar to the console.
+- print_tree(...): Prints a tree to the console.
+- bar_chart(...): Prints a bar chart to the console.
 
 Constants:
 - NAME: The name of the module.
