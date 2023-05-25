@@ -1,15 +1,25 @@
 # 💻 ConsoleVerse
 
-[![Build Status](https://travis-ci.org/username/consoleverse.svg?branch=main)](https://travis-ci.org/username/consoleverse)
-[![License](https://img.shields.io/github/license/username/consoleverse)](https://github.com/username/consoleverse/blob/main/LICENSE)
 
-ConsoleVerse is a Python library that provides a set of tools for managing console output, input and styling. It aims to simplify console interactions and improve user experience.
+<center>
+<img src="docs/img/ConsoleVerse_logo_fullcolor.png" width="150" style="border-radius: 25%;">
+
+<hr>
+
+[![License](https://img.shields.io/github/license/JuanS3/consoleverse)](https://github.com/JuanS3/consoleverse/blob/main/LICENSE)
+[![License](https://img.shields.io/github/languages/code-size/JuanS3/consoleverse?color=green&logo=python)](https://img.shields.io/github/languages/code-size/JuanS3/consoleverse?color=green&logo=python)
+
+</center>
+
+
+
+ConsoleVerse is a **Python** library that provides a set of tools for managing console output, input and styling. It aims to simplify console interactions and improve user experience.
 
 ## 🚀 Features
 
 - Simple and intuitive API
 - Customizable styling options
-- Support for animations and progress bars
+- Support for progress bars
 - Cross-platform compatibility
 
 ## 💾 Installation
@@ -26,13 +36,33 @@ pip install consoleverse
 To use ConsoleVerse in your Python project, simply import it and start using its features:
 
 ```python
-import consoleverse.console as console
+>>> from consoleverse import console
 
-console.print("Hello, world!")
+>>> console.println("Hello, ConsoleVerse!")
+... Hello, ConsoleVerse!
 
-console.input("What's your name? ")
+>>> console.inputln("Your name? ")
+... Your name?
 
-console.success("Success!")
+>>> matrix = [[1, 2, 3], [4, 5, 6]]
+>>> print_matrix(matrix)
+...
+...     0  1  2
+...     -------
+... 0 | 1  2  3 |
+... 1 | 4  5  6 |
+...     -------
+
+>>> print_matrix(matrix,
+>>>              header=['one', 'two', 'three'],
+>>>              indexes=['row1', 'row2'],
+>>>              style='semibox'
+>>>              )
+...
+...          one     two    three
+...        -----------------------
+... row1 |    1       2       3
+... row2 |    4       5       6
 ```
 
 For more detailed usage instructions, please see the usage documentation.
