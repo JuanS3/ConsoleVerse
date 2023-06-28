@@ -271,11 +271,20 @@ def _colorize(
         The colorized text
     """
     ctext = ColorText()
-    ctext = ctext[color] if color in ctext else ''
+    if color not in ctext:
+        raise ErrorNotDefinedColor(color)
+    ctext = ctext[color]
+
     cbaground = ColorBackground()
-    cbaground = cbaground[bg_color] if bg_color in cbaground else ''
+    if bg_color not in cbaground:
+        raise ErrorNotDefinedColor(bg_color)
+    cbaground = cbaground[bg_color]
+
     stext = StyleText()
-    stext = stext[style] if style in stext else ''
+    if style not in stext:
+        raise ErrorNotDefinedStyle(style)
+    stext = stext[style]
+
     colorized_text = f'{ctext}{cbaground}{stext}{text}'
 
     if reset_console_colors:
@@ -1333,8 +1342,7 @@ def print_matrix(
     elif style in ('doubleline', 'dl'):
         __print_matrix_doubleline_style(**kwargs)
     else:
-        # TODO: language support
-        raise ErrorNotDefinedStyle(f'Unknown style: {style}')
+        raise ErrorNotDefinedStyle(style)
 
 
 def inputln(
@@ -1402,7 +1410,6 @@ def inputln(
     return input_type(input())
 
 
-# TODO: docstring
 # TODO: add support for the personalized border style
 # TODO: add support text alignment
 def textbox(
@@ -1453,6 +1460,12 @@ def textbox(
     border : str, optional
         The style of the border, the style must be one of the `STYLES_LIST`,
         by default is `simpleline`
+
+    border_color : str, optional
+        The color of the border, the color must be one of the `COLORS_LIST`
+
+    border_style : str, optional
+        The style of the border, the style must be one of the `STYLES_LIST`
     """
     message = __to_string(*message, sep=sep)
     lines = message.split('\n')
@@ -1470,8 +1483,7 @@ def textbox(
         vertical_blank = Line.DV + ' ' * (max_len + 2) + Line.DV
         vertical = Line.DV
     else:
-        # TODO: language support
-        raise ErrorNotDefinedStyle(f'Unknown border style: {border}')
+        raise ErrorNotDefinedStyle(border)
 
     pln = lambda s: println(s, withlvl=withlvl, color=border_color, style=border_style)
 
@@ -1612,8 +1624,7 @@ def print_tree(
     }
     style = STYLE_TREE.get(style_tree)
     if style is None:
-        # TODO: language support
-        raise ErrorNotDefinedStyle(f'Unknown style: {style_tree}')
+        raise ErrorNotDefinedStyle(style_tree)
 
     upper_left = style['upper_left']
     down_left = style['down_left']
@@ -1701,6 +1712,21 @@ def bar_chart(
 
     bar : str, optional
         The bar to print, by default is '███'
+
+    title : str, optional
+        The title of the bar chart, by default is empty
+
+    title_color : str, optional
+        The color of the title, by default has no color
+
+    title_style : str, optional
+        The style of the title, by default has no style
+
+    title_bg_color : str, optional
+        The background color of the title, by default has no background color
+
+    title_align : str, optional
+        The align of the title, by default is 'center'
     """
 
     normalize = lambda value: int(value / max(data) * 10)
@@ -1711,7 +1737,6 @@ def bar_chart(
     num_values = len(data)
     bar = f'{bar} '
     len_bar = len(bar)
-
 
     new_line()
     new_line()
