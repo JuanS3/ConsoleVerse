@@ -10,9 +10,7 @@ class ErrorNotDefinedStyle(ValueErrorConsole):
 
     def __init__(self, style: str):
         self.style = style
-
-    def __str__(self):
-        return self.MSG[lang.Language()].format(self.style)
+        super().__init__(self.MSG[lang.lang()].format(style))
 
     def __repr__(self):
         return f'ErrorNotDefinedStyle({self.style!r})'
@@ -26,9 +24,7 @@ class ErrorNotDefinedBorderStyle(ValueErrorConsole):
 
     def __init__(self, border_style: str):
         self.border_style = border_style
-
-    def __str__(self):
-        return self.MSG[lang.Language()].format(self.border_style)
+        super().__init__(self.MSG[lang.lang()].format(border_style))
 
     def __repr__(self):
         return f'ErrorNotDefinedBorderStyle({self.border_style!r})'
@@ -42,9 +38,7 @@ class ErrorNotDefinedColor(ValueErrorConsole):
 
     def __init__(self, color: str):
         self.color = color
-
-    def __str__(self):
-        return self.MSG[lang.Language()].format(self.color)
+        super().__init__(self.MSG[lang.lang()].format(color))
 
     def __repr__(self):
         return f'ErrorNotDefinedColor({self.color!r})'

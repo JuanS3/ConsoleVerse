@@ -271,19 +271,19 @@ def _colorize(
         The colorized text
     """
     ctext = ColorText()
-    if color not in ctext:
+    if color not in ctext and color != '':
         raise ErrorNotDefinedColor(color)
-    ctext = ctext[color]
+    ctext = ctext[color] if color != '' else ''
 
     cbaground = ColorBackground()
-    if bg_color not in cbaground:
+    if bg_color not in cbaground and bg_color != '':
         raise ErrorNotDefinedColor(bg_color)
-    cbaground = cbaground[bg_color]
+    cbaground = cbaground[bg_color] if bg_color != '' else ''
 
     stext = StyleText()
-    if style not in stext:
+    if style not in stext and style != '':
         raise ErrorNotDefinedStyle(style)
-    stext = stext[style]
+    stext = stext[style] if style != '' else ''
 
     colorized_text = f'{ctext}{cbaground}{stext}{text}'
 
