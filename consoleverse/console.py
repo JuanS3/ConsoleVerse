@@ -483,8 +483,8 @@ def new_line():
 
 
 def line(
-        size: int = 30,
         style: str = '-- ',
+        size: int = 30,
         color: str = '',
         bg_color: str = '',
         style_text: str = ''
