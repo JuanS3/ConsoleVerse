@@ -270,6 +270,13 @@ def _colorize(
     str
         The colorized text
     """
+    if color is None:
+        color = ''
+    if bg_color is None:
+        bg_color = ''
+    if style is None:
+        style = ''
+
     ctext = ColorText()
     if color not in ctext and color != '':
         raise ErrorNotDefinedColor(color)
