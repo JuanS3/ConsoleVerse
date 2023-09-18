@@ -27,7 +27,11 @@ ConsoleVerse is a **Python** library that provides a set of tools for managing c
 To install ConsoleVerse, simply run:
 
 ```python
+# from PyPI
 pip install consoleverse
+
+# from GitHub
+pip install git+https://github.com/JuanS3/ConsoleVerse.git
 ```
 
 
