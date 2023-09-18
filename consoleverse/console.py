@@ -1150,7 +1150,6 @@ def __print_matrix_simpleline_style(
     withlvl : bool, optional
         True if the matrix should be printed with the current indentation False in otherwise
     """
-    # div: str = Line.SH * (len(matrix[0]) * max_len_value + len(matrix[0]) * 2 + 2)
     try:
         len_matrix = len(matrix[0])
     except:
@@ -1244,7 +1243,6 @@ def __print_matrix_doubleline_style(matrix,
     withlvl : bool, optional
         True if the matrix should be printed with the current indentation False in otherwise
     """
-    # div: str = Line.DH * (len(matrix[0]) * max_len_value + len(matrix[0]) * 2 + 2)
     try:
         len_matrix = len(matrix[0])
     except:
