@@ -592,8 +592,10 @@ def __print_matrix_header(
     indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
 
     println(f'{indentation}{spaces}{extra_spacing}', endl='', withlvl=False)
-    for h in header:
-        println(f' {h : ^{max_len_value}} ', color=color_index, endl='', withlvl=False)
+    for i, h in enumerate(header):
+        width = max_len_value if type(max_len_value) is int else max_len_value[i]
+
+        println(f' {h : ^{width}} ', color=color_index, endl='', withlvl=False)
     new_line()
 
 
@@ -652,9 +654,11 @@ def __print_matrix_row(
     println(index_name,  endl='', color=color_index, withlvl=False)
     println(start_line,  endl='', color=color_style, withlvl=False)
 
-    for cell in row:
+    for i, cell in enumerate(row):
         cellstr = str(cell) if str(cell) not in ('None', 'nan', 'NaN', '') else nan_format
-        println(f' {cellstr : ^{max_len_value}} ', color=color, endl='', withlvl=False)
+
+        width = max_len_value if type(max_len_value) is int else max_len_value[i]
+        println(f' {cellstr : ^{width}} ', color=color, endl='', withlvl=False)
     println(end_line, color=color_style, withlvl=False)
 
 
@@ -848,7 +852,8 @@ def __print_matrix_box_style(
     withlvl : bool, optional
         True if the matrix should be printed with the current indentation False in otherwise
     """
-    div: str = '-' * (len(matrix[0]) * max_len_value) + '-' * (len(matrix[0]) * 2)
+    # div: str = '-' * (len(matrix[0]) * max_len_value) + '-' * (len(matrix[0]) * 2)
+    div: str = __define_divider_line('-', max_len_value, len(matrix[0]))
     spaces: str = ' ' * (len_index + 3)
     indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
 
@@ -865,7 +870,7 @@ def __print_matrix_box_style(
         style=style,
         withlvl=withlvl,
         start_line=' | ',
-        end_line=f' | ' if style == 'box' else '',
+        end_line=f' |' if style == 'box' else '',
         top_line=f'{indentation}{spaces}{div}',
         bottom_line=f'{indentation}{spaces}{div}' if style == 'box' else new_line(),
         middle_vertical_line=None,
@@ -1049,6 +1054,11 @@ def __print_matrix_without_style(
     )
 
 
+def __define_divider_line(style: str, max_len_value: int | list, len_matrix: int) -> str:
+    div: str = style * sum([w for w in max_len_value]) + style * (len_matrix * 2)
+    return div
+
+
 def __print_matrix_simpleline_style(
         matrix,
         header: List[str],
@@ -1114,7 +1124,8 @@ def __print_matrix_simpleline_style(
     withlvl : bool, optional
         True if the matrix should be printed with the current indentation False in otherwise
     """
-    div: str = Line.SH * (len(matrix[0]) * max_len_value + len(matrix[0]) * 2 + 2)
+    # div: str = Line.SH * (len(matrix[0]) * max_len_value + len(matrix[0]) * 2 + 2)
+    div: str = __define_divider_line(Line.SH, max_len_value, len(matrix[0]) + 1)
     spaces: str = ' ' * (len_index + 1)
     indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
 
@@ -1203,7 +1214,8 @@ def __print_matrix_doubleline_style(matrix,
     withlvl : bool, optional
         True if the matrix should be printed with the current indentation False in otherwise
     """
-    div: str = Line.DH * (len(matrix[0]) * max_len_value + len(matrix[0]) * 2 + 2)
+    # div: str = Line.DH * (len(matrix[0]) * max_len_value + len(matrix[0]) * 2 + 2)
+    div: str = __define_divider_line(Line.DH, max_len_value, len(matrix[0]) + 1)
     spaces: str = ' ' * (len_index + 1)
     indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
 
@@ -1237,7 +1249,8 @@ def print_matrix(
         color: str = None,
         color_index: str = '',
         color_style: str = '',
-        withlvl: bool = True
+        withlvl: bool = True,
+        column_width: str = 'auto'
     ) -> None:
     """
     Print a matrix in a pretty formatted
@@ -1309,6 +1322,11 @@ def print_matrix(
 
     withlvl : bool, optional
         True if the matrix should be printed with the current indentation False in otherwise
+
+    column_width : str, optional
+        The width of the columns, by default `auto`
+        - `auto` The width of the columns is the longest value of the column
+        - `equal` The width of the columns is the same
     """
     if indexes == 'all':
         indexes = [str(i) for i in range(len(matrix))]
@@ -1316,9 +1334,14 @@ def print_matrix(
     if header == 'all':
         header = [str(i) for i in range(len(matrix[0]))]
 
+    if column_width == 'equal':
+        max_len_value = __max_len_value(matrix, nan_format)
+        max_len_value = max(max_len_value, __max_len_value([] if header is None else header, nan_format))
+    else:
+        matrix_with_header = [header] + matrix
+        matrix_by_column = list(zip(*matrix_with_header))
+        max_len_value = [__max_len_value(column, nan_format) for column in matrix_by_column]
 
-    max_len_value = __max_len_value(matrix, nan_format)
-    max_len_value = max(max_len_value, __max_len_value([] if header is None else header, nan_format))
 
     len_index = 0
 
