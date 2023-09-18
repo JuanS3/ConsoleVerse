@@ -1055,7 +1055,30 @@ def __print_matrix_without_style(
 
 
 def __define_divider_line(style: str, max_len_value: int | list, len_matrix: int) -> str:
-    div: str = style * sum([w for w in max_len_value]) + style * (len_matrix * 2)
+    """
+    Define the divider line for the matrix
+
+    Parameters
+    ----------
+    style : str
+        The style of the divider line
+
+    max_len_value : int | list
+        The longest value in the matrix
+
+    len_matrix : int
+        The number of columns in the matrix
+
+    Returns
+    -------
+    str
+        The divider line
+    """
+    if type(max_len_value) is list:
+        width: int = sum([w for w in max_len_value])
+    else:
+        width: int = max_len_value * (len_matrix - 1)
+    div: str = style * width + style * (len_matrix * 2)
     return div
 
 
