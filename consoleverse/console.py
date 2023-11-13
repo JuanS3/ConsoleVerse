@@ -1272,6 +1272,56 @@ def __print_matrix_doubleline_style(matrix,
     )
 
 
+def print_title(
+        *message: Any,
+        color: str = None,
+        bg_color: str = None,
+        style: str = None,
+        align: str = 'center',
+        total_space: int = 30
+    ) -> None:
+    """
+    Display a title in the console
+
+    Parameters
+    ----------
+    message : Any
+        The title of the block
+
+    color : str, optional
+        The color of the title block, by default BLUE
+
+    bg_color : str, optional
+        The background color of the title block, by default has no color
+
+    style : str, optional
+        The style of the title block, by default has no style
+
+    align : str, optional
+        The alignment of the title, by default `center`
+        - `center` The title is centered
+        - `left` The title is aligned to the left
+        - `right` The title is aligned to the right
+
+    num_values : int, optional
+        The number of values to be displayed, by default 30
+    """
+    message = __to_string(*message)
+
+    new_line()
+
+    if message:
+        if align in ('center', 'c'):
+            message = message.center(total_space)
+        elif align in ('left', 'l'):
+            message = message.ljust(total_space)
+        elif align in ('right', 'r'):
+            message = message.rjust(total_space)
+
+        println(message, color=color, style=style, bg_color=bg_color)
+        new_line()
+
+# TODO: Add support for alignment center, left and right for the values
 def print_matrix(
         matrix,
         header: Union[List[str], str] = 'all',
@@ -1282,7 +1332,12 @@ def print_matrix(
         color_index: str = '',
         color_style: str = '',
         withlvl: bool = True,
-        column_width: str = 'auto'
+        column_width: str = 'auto',
+        title: str = None,
+        title_color: str = None,
+        title_bg_color: str = None,
+        title_style: str = None,
+        title_align: str = 'center',
     ) -> None:
     """
     Print a matrix in a pretty formatted
@@ -1359,6 +1414,28 @@ def print_matrix(
         The width of the columns, by default `auto`
         - `auto` The width of the columns is the longest value of the column
         - `equal` The width of the columns is the same
+
+    title : str, optional
+        The title of the matrix, by default has no title
+
+    title_color : str, optional
+        The color of the title, the color must be one of the `COLORS_LIST`
+        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available
+
+    title_bg_color : str, optional
+        The background color of the title, the color must be one of the `BACKGROUNS_LIST`
+        or `COLORS_LIST` for all colors available
+
+    title_style : str, optional
+        The style of the title, the style must be one of the `STYLES_LIST`
+
+    title_align : str, optional
+        The alignment of the title, by default `center`
+
+    Raises
+    ------
+    ErrorNotDefinedStyle
+        If the style is not defined
     """
     if indexes == 'all':
         indexes = [str(i) for i in range(len(matrix))]
@@ -1374,6 +1451,16 @@ def print_matrix(
         matrix_by_column = list(zip(*matrix_with_header))
         max_len_value = [__max_len_value(column, nan_format) for column in matrix_by_column]
 
+    if title:
+        space = max([len(i) for i in indexes]) + sum(len(i) + 3 for i in header) + 2
+        print_title(
+            title,
+            color=title_color,
+            bg_color=title_bg_color,
+            style=title_style,
+            align=title_align,
+            total_space=space
+        )
 
     len_index = 0
 
@@ -1743,6 +1830,7 @@ def print_tree(
 
     recursive_print_tree(tree)
 
+
 def bar_chart(
         data: list[int] | dict,
         colors: list[str],
@@ -1801,18 +1889,14 @@ def bar_chart(
     len_bar = len(bar)
 
     new_line()
-    new_line()
-
-    if title:
-        if title_align in ('center', 'c'):
-            title = title.center(num_values * len_bar)
-        elif title_align in ('left', 'l'):
-            title = title.ljust(num_values * len_bar)
-        elif title_align in ('right', 'r'):
-            title = title.rjust(num_values * len_bar)
-
-        println(title, color=title_color, style=title_style, bg_color=title_bg_color)
-        new_line()
+    print_title(
+        title,
+        color=title_color,
+        style=title_style,
+        bg_color=title_bg_color,
+        align=title_align,
+        total_space=num_values * len_bar
+    )
 
     for i in range(max_value, 0, -1):
         line = ''
