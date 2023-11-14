@@ -50,8 +50,8 @@ import functools
 import os
 
 from consoleverse.config import lang
-from consoleverse.term import *
-from consoleverse.exceptions import *
+from consoleverse import term
+from consoleverse import exceptions as ex
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -224,7 +224,7 @@ def reset_colors() -> None:
     """
     Reset the colors of the console
     """
-    print(ColorText().reset(), end='')
+    print(term.ColorText().reset(), end='')
 
 
 def reset_config() -> None:
@@ -298,25 +298,25 @@ def _colorize(
     if style is None:
         style = ''
 
-    ctext = ColorText()
+    ctext = term.ColorText()
     if color not in ctext and color != '':
-        raise ErrorNotDefinedColor(color)
+        raise ex.ErrorNotDefinedColor(color)
     ctext = ctext[color] if color != '' else ''
 
-    cbaground = ColorBackground()
+    cbaground = term.ColorBackground()
     if bg_color not in cbaground and bg_color != '':
-        raise ErrorNotDefinedColor(bg_color)
+        raise ex.ErrorNotDefinedColor(bg_color)
     cbaground = cbaground[bg_color] if bg_color != '' else ''
 
-    stext = StyleText()
+    stext = term.StyleText()
     if style not in stext and style != '':
-        raise ErrorNotDefinedStyle(style)
+        raise ex.ErrorNotDefinedStyle(style)
     stext = stext[style] if style != '' else ''
 
     colorized_text = f'{ctext}{cbaground}{stext}{text}'
 
     if reset_console_colors:
-        colorized_text += ColorText().reset()
+        colorized_text += term.ColorText().reset()
 
     return colorized_text
 
@@ -1177,7 +1177,7 @@ def __print_matrix_simpleline_style(
         len_matrix = len(matrix[0])
     except:
         len_matrix = len(header)
-    div: str = __define_divider_line(Line.SH, max_len_value, len_matrix + 1)
+    div: str = __define_divider_line(term.Line.SH, max_len_value, len_matrix + 1)
     spaces: str = ' ' * (len_index + 1)
     indentation: str = _ConsoleConfig.indentation_lvl() if withlvl else ''
 
@@ -1193,10 +1193,10 @@ def __print_matrix_simpleline_style(
         len_index=len_index,
         style=style,
         withlvl=withlvl,
-        start_line=f' {Line.SV} ',
-        end_line=f' {Line.SV} ',
-        top_line=f'{indentation}{spaces}{Line.STL}{div}{Line.STR}',
-        bottom_line=f'{indentation}{spaces}{Line.SBL}{div}{Line.SBR}',
+        start_line=f' {term.Line.SV} ',
+        end_line=f' {term.Line.SV} ',
+        top_line=f'{indentation}{spaces}{term.Line.STL}{div}{term.Line.STR}',
+        bottom_line=f'{indentation}{spaces}{term.Line.SBL}{div}{term.Line.SBR}',
         middle_vertical_line=None,
         middle_horizontal_line=None
     )
@@ -1270,7 +1270,7 @@ def __print_matrix_doubleline_style(matrix,
         len_matrix = len(matrix[0])
     except:
         len_matrix = len(header)
-    div: str = __define_divider_line(Line.DH, max_len_value, len_matrix + 1)
+    div: str = __define_divider_line(term.Line.DH, max_len_value, len_matrix + 1)
     spaces: str = ' ' * (len_index + 1)
     indentation: str = _ConsoleConfig.indentation_lvl() if withlvl else ''
 
@@ -1286,10 +1286,10 @@ def __print_matrix_doubleline_style(matrix,
         len_index=len_index,
         style=style,
         withlvl=withlvl,
-        start_line=f' {Line.DV} ',
-        end_line=f' {Line.DV} ',
-        top_line=f'{indentation}{spaces}{Line.DTL}{div}{Line.DTR}',
-        bottom_line=f'{indentation}{spaces}{Line.DBL}{div}{Line.DBR}',
+        start_line=f' {term.Line.DV} ',
+        end_line=f' {term.Line.DV} ',
+        top_line=f'{indentation}{spaces}{term.Line.DTL}{div}{term.Line.DTR}',
+        bottom_line=f'{indentation}{spaces}{term.Line.DBL}{div}{term.Line.DBR}',
         middle_vertical_line=None,
         middle_horizontal_line=None
     )
@@ -1517,7 +1517,7 @@ def print_matrix(
     elif style in ('doubleline', 'dl'):
         __print_matrix_doubleline_style(**kwargs)
     else:
-        raise ErrorNotDefinedStyle(style)
+        raise ex.ErrorNotDefinedStyle(style)
 
 
 def inputln(
@@ -1648,17 +1648,17 @@ def textbox(
     max_len = max([len(l) for l in lines])
 
     if border == 'simpleline':
-        top = Line.STL + Line.SH * (max_len + 2) + Line.STR
-        bottom = Line.SBL + Line.SH * (max_len + 2) + Line.SBR
-        vertical_blank = Line.SV + ' ' * (max_len + 2) + Line.SV
-        vertical = Line.SV
+        top = term.Line.STL + term.Line.SH * (max_len + 2) + term.Line.STR
+        bottom = term.Line.SBL + term.Line.SH * (max_len + 2) + term.Line.SBR
+        vertical_blank = term.Line.SV + ' ' * (max_len + 2) + term.Line.SV
+        vertical = term.Line.SV
     elif border == 'doubleline':
-        top = Line.DTL + Line.DH * (max_len + 2) + Line.DTR
-        bottom = Line.DBL + Line.DH * (max_len + 2) + Line.DBR
-        vertical_blank = Line.DV + ' ' * (max_len + 2) + Line.DV
-        vertical = Line.DV
+        top = term.Line.DTL + term.Line.DH * (max_len + 2) + term.Line.DTR
+        bottom = term.Line.DBL + term.Line.DH * (max_len + 2) + term.Line.DBR
+        vertical_blank = term.Line.DV + ' ' * (max_len + 2) + term.Line.DV
+        vertical = term.Line.DV
     else:
-        raise ErrorNotDefinedStyle(border)
+        raise ex.ErrorNotDefinedStyle(border)
 
     def pln(s: str) -> None:
         println(s, withlvl=withlvl, color=border_color, style=border_style)
@@ -1784,23 +1784,23 @@ def print_tree(
     """
     STYLE_TREE = {
         'simple': {
-            'upper_left': Line.STL,
-            'down_left': Line.SBL,
-            'vertical': Line.SV,
-            'horizontal': Line.SH,
-            'vertical_and_right': Line.SL
+            'upper_left': term.Line.STL,
+            'down_left': term.Line.SBL,
+            'vertical': term.Line.SV,
+            'horizontal': term.Line.SH,
+            'vertical_and_right': term.Line.SL
         },
         'doubleline': {
-            'upper_left': Line.DTL,
-            'down_left': Line.DBL,
-            'vertical': Line.DV,
-            'horizontal': Line.DH,
-            'vertical_and_right': Line.DL
+            'upper_left': term.Line.DTL,
+            'down_left': term.Line.DBL,
+            'vertical': term.Line.DV,
+            'horizontal': term.Line.DH,
+            'vertical_and_right': term.Line.DL
         }
     }
     style = STYLE_TREE.get(style_tree)
     if style is None:
-        raise ErrorNotDefinedStyle(style_tree)
+        raise ex.ErrorNotDefinedStyle(style_tree)
 
     upper_left = style['upper_left']
     down_left = style['down_left']
