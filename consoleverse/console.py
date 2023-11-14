@@ -22,6 +22,7 @@ Functions:
 - progress_bar(...): Prints a progress bar to the console.
 - print_tree(...): Prints a tree to the console.
 - bar_chart(...): Prints a bar chart to the console.
+- print_title(...): Prints a title to the console.
 
 Constants:
 - NAME: The name of the module.
@@ -145,6 +146,9 @@ class _ConsoleConfig:
 
     @staticmethod
     def reset_config() -> None:
+        """
+        Reset the configuration of the console
+        """
         _ConsoleConfig._indentation_type  : str = ' '
         _ConsoleConfig._indentation_lvl   : str = ''
         _ConsoleConfig._indentantion_size : int = 2
@@ -163,15 +167,32 @@ class _ConsoleConfig:
 
     @staticmethod
     def indentation_lvl() -> str:
+        """
+        Return the current indentation level
+
+        Returns
+        -------
+        str
+            The current indentation level
+        """
         return _ConsoleConfig._indentation_lvl
 
     @staticmethod
     def add_indentation_lvl() -> None:
-        _ConsoleConfig._indentation_lvl += (_ConsoleConfig._indentation_type * _ConsoleConfig._indentantion_size)
+        """
+        Add one level (indentation)
+        """
+        _ConsoleConfig._indentation_lvl += (
+            _ConsoleConfig._indentation_type * _ConsoleConfig._indentantion_size
+        )
 
     @staticmethod
     def del_indentation_lvl() -> None:
-        _ConsoleConfig._indentation_lvl = _ConsoleConfig._indentation_lvl[:-_ConsoleConfig._indentantion_size]
+        """
+        Substract one level (indentation)
+        """
+        _ConsoleConfig._indentation_lvl = \
+            _ConsoleConfig._indentation_lvl[:-_ConsoleConfig._indentantion_size]
 
 
 def init(clear: bool = True,
@@ -350,7 +371,7 @@ def println(
     message = __to_string(*message, sep=sep)
 
     if withlvl:
-        message = _ConsoleConfig._indentation_lvl + message
+        message = _ConsoleConfig.indentation_lvl() + message
 
     colorized_text: str = _colorize(text=message,
                                     color=color,
@@ -510,10 +531,10 @@ def line(
     style_text : str, optional
         The style of the line, by default has no style
     """
-    line: str = style * size
-    if line[:-1] == ' ':
-        line = line[:-1]
-    println(line, color=color, bg_color=bg_color, style=style_text)
+    full_line: str = style * size
+    if full_line[:-1] == ' ':
+        full_line = full_line[:-1]
+    println(full_line, color=color, bg_color=bg_color, style=style_text)
     new_line()
 
 
@@ -589,11 +610,11 @@ def __print_matrix_header(
         Number of aditional spaces based on the style
     """
     spaces: str = ' ' * (len_index + lvl_space)
-    indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
+    indentation: str = _ConsoleConfig.indentation_lvl() if withlvl else ''
 
     println(f'{indentation}{spaces}{extra_spacing}', endl='', withlvl=False)
     for i, h in enumerate(header):
-        width = max_len_value if type(max_len_value) is int else max_len_value[i]
+        width = max_len_value if isinstance(max_len_value, int) else max_len_value[i]
 
         println(f' {h : ^{width}} ', color=color_index, endl='', withlvl=False)
     new_line()
@@ -657,7 +678,7 @@ def __print_matrix_row(
     for i, cell in enumerate(row):
         cellstr = str(cell) if str(cell) not in ('None', 'nan', 'NaN', '') else nan_format
 
-        width = max_len_value if type(max_len_value) is int else max_len_value[i]
+        width = max_len_value if isinstance(max_len_value, int) else max_len_value[i]
         println(f' {cellstr : ^{width}} ', color=color, endl='', withlvl=False)
     println(end_line, color=color_style, withlvl=False)
 
@@ -755,7 +776,7 @@ def __print_matrix_base(
     level_space : int, optional
         The space between the level and the matrix, by default 3
     """
-    indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
+    indentation: str = _ConsoleConfig.indentation_lvl() if withlvl else ''
 
     if header:
         __print_matrix_header(header=header,
@@ -779,7 +800,9 @@ def __print_matrix_base(
                            color_index = color_index,
                            end_line = end_line,
                            start_line = start_line,
-                           index_name = f'{indexes[index_row_id]: >{len_index}}' if indexes is not None else '',
+                           index_name = f'{indexes[index_row_id]: >{len_index}}'
+                                        if indexes is not None
+                                        else '',
                            indentation = indentation
                            )
 
@@ -858,7 +881,7 @@ def __print_matrix_box_style(
         len_matrix = len(header)
     div: str = __define_divider_line('-', max_len_value, len_matrix)
     spaces: str = ' ' * (len_index + 3)
-    indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
+    indentation: str = _ConsoleConfig.indentation_lvl() if withlvl else ''
 
     __print_matrix_base(
         matrix=matrix,
@@ -873,7 +896,7 @@ def __print_matrix_box_style(
         style=style,
         withlvl=withlvl,
         start_line=' | ',
-        end_line=f' |' if style == 'box' else '',
+        end_line=' |' if style == 'box' else '',
         top_line=f'{indentation}{spaces}{div}',
         bottom_line=f'{indentation}{spaces}{div}' if style == 'box' else new_line(),
         middle_vertical_line=None,
@@ -941,7 +964,7 @@ def __print_matrix_numpy_style(
     withlvl : bool, optional
         True if the matrix should be printed with the current indentation False in otherwise
     """
-    indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
+    indentation: str = _ConsoleConfig.indentation_lvl() if withlvl else ''
 
     if header is not None:
         __print_matrix_header(header = header,
@@ -1077,8 +1100,8 @@ def __define_divider_line(style: str, max_len_value: int | list, len_matrix: int
     str
         The divider line
     """
-    if type(max_len_value) is list:
-        width: int = sum([w for w in max_len_value])
+    if isinstance(max_len_value, list):
+        width: int = sum(w for w in max_len_value)
     else:
         width: int = max_len_value * (len_matrix - 1)
     div: str = style * width + style * (len_matrix * 2)
@@ -1156,7 +1179,7 @@ def __print_matrix_simpleline_style(
         len_matrix = len(header)
     div: str = __define_divider_line(Line.SH, max_len_value, len_matrix + 1)
     spaces: str = ' ' * (len_index + 1)
-    indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
+    indentation: str = _ConsoleConfig.indentation_lvl() if withlvl else ''
 
     __print_matrix_base(
         matrix=matrix,
@@ -1249,7 +1272,7 @@ def __print_matrix_doubleline_style(matrix,
         len_matrix = len(header)
     div: str = __define_divider_line(Line.DH, max_len_value, len_matrix + 1)
     spaces: str = ' ' * (len_index + 1)
-    indentation: str = _ConsoleConfig._indentation_lvl if withlvl else ''
+    indentation: str = _ConsoleConfig.indentation_lvl() if withlvl else ''
 
     __print_matrix_base(
         matrix=matrix,
@@ -1445,7 +1468,10 @@ def print_matrix(
 
     if column_width == 'equal':
         max_len_value = __max_len_value(matrix, nan_format)
-        max_len_value = max(max_len_value, __max_len_value([] if header is None else header, nan_format))
+        max_len_value = max(
+            max_len_value,
+            __max_len_value([] if header is None else header, nan_format)
+        )
     else:
         matrix_with_header = [header] + matrix
         matrix_by_column = list(zip(*matrix_with_header))
@@ -1619,7 +1645,7 @@ def textbox(
     message = __to_string(*message, sep=sep)
     lines = message.split('\n')
 
-    max_len = max([len(line) for line in lines])
+    max_len = max([len(l) for l in lines])
 
     if border == 'simpleline':
         top = Line.STL + Line.SH * (max_len + 2) + Line.STR
@@ -1634,15 +1660,16 @@ def textbox(
     else:
         raise ErrorNotDefinedStyle(border)
 
-    pln = lambda s: println(s, withlvl=withlvl, color=border_color, style=border_style)
+    def pln(s: str) -> None:
+        println(s, withlvl=withlvl, color=border_color, style=border_style)
 
     pln(top)
     pln(vertical_blank)
 
-    for line in lines:
+    for l in lines:
         println(vertical, withlvl=withlvl, color=border_color, style=border_style, endl='')
         println(
-            ' ' + line + ' ',
+            ' ' + l + ' ',
             withlvl=False,
             color=color,
             bg_color=bg_color,
@@ -1650,7 +1677,7 @@ def textbox(
             style=style,
             endl=''
         )
-        println(' ' * (max_len - len(line)), withlvl=False, endl='')
+        println(' ' * (max_len - len(l)), withlvl=False, endl='')
         println(vertical, withlvl=False, color=border_color, style=border_style)
 
     pln(vertical_blank)
@@ -1708,11 +1735,11 @@ def progress_bar(
     if len(end_bar) != 1:
         raise ValueError('The end_bar must be a single character')
 
-    progress_bar = int(progress * width)
+    progressing_bar = int(progress * width)
     pct_bar = ' (' + str(int(progress * 100)) + '%)' if pct else ''
 
     println(
-        start_bar + bar * progress_bar + spacing * (width - progress_bar) + end_bar + pct_bar,
+        start_bar + bar * progressing_bar + spacing * (width - progressing_bar) + end_bar + pct_bar,
         **kwargs
     )
 
@@ -1801,19 +1828,19 @@ def print_tree(
             The start bar of the tree, by default is ''
         """
         for i, (k, v) in enumerate(sub_tree.items()):
-            bar = ''
+            bar_line = ''
             if   i == 0 and level != 0 and len(sub_tree) > 1:
-                bar = f'{vertical_and_right}{horizontal}'
+                bar_line = f'{vertical_and_right}{horizontal}'
             elif i == 0 and level == 0 and len(sub_tree) > 1 :
-                bar = f'{upper_left}{horizontal}'
+                bar_line = f'{upper_left}{horizontal}'
             elif i == 0 and len(sub_tree) == 1:
-                bar = f'{down_left}{horizontal}'
+                bar_line = f'{down_left}{horizontal}'
             elif i == len(sub_tree) - 1:
-                bar = f'{down_left}{horizontal}'
+                bar_line = f'{down_left}{horizontal}'
             else:
-                bar = f'{vertical_and_right}{horizontal}'
+                bar_line = f'{vertical_and_right}{horizontal}'
 
-            println(f'{start_bar}{bar}', color=color_tree, endl=' ')
+            println(f'{start_bar}{bar_line}', color=color_tree, endl=' ')
             println(k, **println_options)
 
             if isinstance(v, dict):
@@ -1824,8 +1851,8 @@ def print_tree(
                 recursive_print_tree(v, level + 1, start_bar=new_start_bar)
             else:
                 last_lvl = ' ' if i == len(sub_tree) - 1 else vertical
-                bar = f'{start_bar}{last_lvl}  {down_left}{horizontal}'
-                println(bar, color=color_tree, endl=' ')
+                bar_line = f'{start_bar}{last_lvl}  {down_left}{horizontal}'
+                println(bar_line, color=color_tree, endl=' ')
                 println(v, **println_options)
 
     recursive_print_tree(tree)
@@ -1879,8 +1906,12 @@ def bar_chart(
         The align of the title, by default is 'center'
     """
 
-    normalize = lambda value: int(value / max(data) * 10)
-    colorize = lambda text, color: _colorize(text, color=color, style='', bg_color='', reset_console_colors=True)
+    def normalize(value: int) -> int:
+        return int(value / max(data) * 10)
+
+    def colorize(text: str, color: str) -> str:
+        return _colorize(text, color=color, style='', bg_color='', reset_console_colors=True)
+
     data_norm = [normalize(value) for value in data]
 
     max_value = max(data_norm)
@@ -1899,15 +1930,18 @@ def bar_chart(
     )
 
     for i in range(max_value, 0, -1):
-        line = ''
+        chart_line = ''
         for j, value in enumerate(data_norm):
             if value >= i:
-                line += colorize(bar, colors[j])
+                chart_line += colorize(bar, colors[j])
             else:
-                line += ' ' * len_bar
-        println(line, color=colors[j])
+                chart_line += ' ' * len_bar
+        println(chart_line)
 
     println('-' * (num_values * len_bar))
-    println(' '.join(colorize(str(value).center(len_bar - 1), colors[i]) for i, value in enumerate(data)))
+    println(' '.join(
+        colorize(str(value).center(len_bar - 1), colors[i]) for i, value in enumerate(data)
+        )
+    )
 
     new_line()
