@@ -215,10 +215,6 @@ def init(clear: bool = True,
         autoreset_colors=autoreset_colors
     )
 
-    if clear:
-        clear_screen()
-    _ConsoleConfig._is_init = True
-
 
 def reset_colors() -> None:
     """
@@ -1827,15 +1823,16 @@ def print_tree(
         start_bar : str, optional
             The start bar of the tree, by default is ''
         """
+        len_sub_tree = len(sub_tree)
         for i, (k, v) in enumerate(sub_tree.items()):
             bar_line = ''
-            if   i == 0 and level != 0 and len(sub_tree) > 1:
+            if   i == 0 and level != 0 and len_sub_tree > 1:
                 bar_line = f'{vertical_and_right}{horizontal}'
-            elif i == 0 and level == 0 and len(sub_tree) > 1 :
+            elif i == 0 and level == 0 and len_sub_tree > 1 :
                 bar_line = f'{upper_left}{horizontal}'
-            elif i == 0 and len(sub_tree) == 1:
+            elif i == 0 and len_sub_tree == 1:
                 bar_line = f'{down_left}{horizontal}'
-            elif i == len(sub_tree) - 1:
+            elif i == len_sub_tree - 1:
                 bar_line = f'{down_left}{horizontal}'
             else:
                 bar_line = f'{vertical_and_right}{horizontal}'
@@ -1844,13 +1841,13 @@ def print_tree(
             println(k, **println_options)
 
             if isinstance(v, dict):
-                if i == len(sub_tree) - 1:
+                if i == len_sub_tree - 1:
                     new_start_bar = f'{start_bar}  '
                 else:
                     new_start_bar = f'{start_bar}{vertical}  '
                 recursive_print_tree(v, level + 1, start_bar=new_start_bar)
             else:
-                last_lvl = ' ' if i == len(sub_tree) - 1 else vertical
+                last_lvl = ' ' if i == len_sub_tree - 1 else vertical
                 bar_line = f'{start_bar}{last_lvl}  {down_left}{horizontal}'
                 println(bar_line, color=color_tree, endl=' ')
                 println(v, **println_options)
