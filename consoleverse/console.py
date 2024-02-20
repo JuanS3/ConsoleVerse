@@ -48,6 +48,7 @@ from typing import (
 )
 import functools
 import os
+import builtins
 
 from consoleverse.config import lang
 from consoleverse import term
@@ -122,11 +123,12 @@ class _ConsoleConfig:
     _autoreset_colors: bool = True
 
     @staticmethod
-    def init(clear: bool = True,
-             indentation_type: str = ' ',
-             indentation_size: int = 2,
-             autoreset_colors: bool = True
-             ):
+    def init(
+            clear: bool = True,
+            indentation_type: str = ' ',
+            indentation_size: int = 2,
+            autoreset_colors: bool = True
+        ):
         """
         Initialize the console, and resert the indentation level
 
@@ -149,11 +151,11 @@ class _ConsoleConfig:
         """
         Reset the configuration of the console
         """
-        _ConsoleConfig._indentation_type  : str = ' '
-        _ConsoleConfig._indentation_lvl   : str = ''
-        _ConsoleConfig._indentantion_size : int = 2
-        _ConsoleConfig._is_init : bool = False
-        _ConsoleConfig._autoreset_colors : bool = True
+        _ConsoleConfig._indentation_type  = ' '
+        _ConsoleConfig._indentation_lvl   = ''
+        _ConsoleConfig._indentantion_size = 2
+        _ConsoleConfig._is_init = False
+        _ConsoleConfig._autoreset_colors = True
 
     @staticmethod
     def _init():
@@ -195,11 +197,12 @@ class _ConsoleConfig:
             _ConsoleConfig._indentation_lvl[:-_ConsoleConfig._indentantion_size]
 
 
-def init(clear: bool = True,
-         indentation_type: str = ' ',
-         indentation_size: int = 2,
-         autoreset_colors: bool = True
-         ) -> None:
+def init(
+        clear: bool = True,
+        indentation_type: str = ' ',
+        indentation_size: int = 2,
+        autoreset_colors: bool = True
+    ) -> None:
     """
     Initialize the console, and resert the indentation level
 
@@ -220,7 +223,7 @@ def reset_colors() -> None:
     """
     Reset the colors of the console
     """
-    print(term.ColorText().reset(), end='')
+    println(term.ColorText().reset(), end='')
 
 
 def reset_config() -> None:
@@ -319,13 +322,14 @@ def _colorize(
 
 def println(
         *message: Any,
-        endl: str = '\n',
+        end: str = '\n',
         withlvl: bool = True,
         color: str = '',
         bg_color: str = '',
         reset_all_colors: bool = True,
         style: str = '',
-        sep: str = ' '
+        sep: str = ' ',
+        **kwargs
     ) -> None:
     """
     Print the message to the console, the `endl` is the same as `end` in print function
@@ -337,7 +341,7 @@ def println(
     message : Any
         Message to print to console
 
-    endl : str, optional
+    end : str, optional
         The end of line, by default `\\n`
 
     withlvl : bool, optional
@@ -362,6 +366,9 @@ def println(
 
     sep : str, optional
         The separator between the values, by default is a space
+
+    kwargs : dict
+        Additional parameters to print the function
     """
     _ConsoleConfig._init()
     message = __to_string(*message, sep=sep)
@@ -369,13 +376,14 @@ def println(
     if withlvl:
         message = _ConsoleConfig.indentation_lvl() + message
 
-    colorized_text: str = _colorize(text=message,
-                                    color=color,
-                                    bg_color=bg_color,
-                                    style=style,
-                                    reset_console_colors=reset_all_colors
-                                    )
-    print(colorized_text, end=endl)
+    colorized_text: str = _colorize(
+        text=message,
+        color=color,
+        bg_color=bg_color,
+        style=style,
+        reset_console_colors=reset_all_colors
+    )
+    builtins.print(colorized_text, end=end, **kwargs)
 
 
 def __to_string(*values: Any, sep: str = ' ') -> str:
@@ -398,10 +406,11 @@ def start_block(*message: Any, color: str = 'BLUE', bg_color: str = '') -> None:
         The background color of the title block, by default has no color
     """
     message = __to_string(*message)
-    println(f'{__START_LANGS[lang.lang()]} {message.upper()}',
-            color=color,
-            bg_color=bg_color
-            )
+    println(
+        f'{__START_LANGS[lang.lang()]} {message.upper()}',
+        color=color,
+        bg_color=bg_color
+    )
     add_lvl()
 
 
@@ -430,19 +439,20 @@ def end_block(
     """
     message = __to_string(*message)
     del_lvl()
-    println(f'{__END_LANGS[lang.lang()]} {message.upper()}',
-            color=color,
-            bg_color=bg_color,
-            style=style
-            )
+    println(
+        f'{__END_LANGS[lang.lang()]} {message.upper()}',
+        color=color,
+        bg_color=bg_color,
+        style=style
+    )
     new_line()
 
 
 def warning(
         *message: Any,
-        color: str = 'BLUE',
+        color: str = 'YELLOW',
         bg_color: str = '',
-        style: str = ''
+        style: str = 'bold'
     ) -> None:
     """
     Warning message starts with 'warning: {message}'
@@ -469,7 +479,7 @@ def error(
         *message: Any,
         color: str = 'RED',
         bg_color: str = '',
-        style: str = ''
+        style: str = 'bold'
     ) -> None:
     """
     Error message is displayed like `error: >>> {message} <<<`
@@ -489,7 +499,12 @@ def error(
         The style of the message, by default has no style
     """
     message = __to_string(*message)
-    println(f'error: >>> {message} <<<', color=color, bg_color=bg_color, style=style)
+    println(
+        f'error: >>> {message} <<<',
+        color=color,
+        bg_color=bg_color,
+        style=style
+    )
 
 
 def new_line():
@@ -500,38 +515,31 @@ def new_line():
 
 
 def line(
-        style: str = '-- ',
-        size: int = 30,
-        color: str = '',
-        bg_color: str = '',
-        style_text: str = ''
+        line_style: str = term.Line.SH,
+        size: int = 80,
+        **kwargs
     ) -> None:
     """
-    Display a line in the console like this `-- -- -- -- -- -- --`
+    Display a line in the console like this `────────────────────`
     whit the indicated size
 
     Parameters
     ----------
+    line_style : str, optional
+        The style of the line, by default is `term.Line.SH`
+
     size : int, optional
         The size of the line to display, by display 30
 
-    style : str, optional
-        The style of the line, by default is '-- '
-
-    color : str, optional
-        The color of the line, by default has no color
-
-    bg_color : str, optional
-        The background color of the line, by default has no color
-
-    style_text : str, optional
-        The style of the line, by default has no style
+    kwargs : dict
+        The same parameters of the `println` function
     """
-    full_line: str = style * size
+    full_line: str = line_style * size
+
     if full_line[:-1] == ' ':
         full_line = full_line[:-1]
-    println(full_line, color=color, bg_color=bg_color, style=style_text)
-    new_line()
+
+    println(full_line, **kwargs)
 
 
 def __max_len_value(matrix, nan_format) -> int:
@@ -608,11 +616,11 @@ def __print_matrix_header(
     spaces: str = ' ' * (len_index + lvl_space)
     indentation: str = _ConsoleConfig.indentation_lvl() if withlvl else ''
 
-    println(f'{indentation}{spaces}{extra_spacing}', endl='', withlvl=False)
+    println(f'{indentation}{spaces}{extra_spacing}', end='', withlvl=False)
     for i, h in enumerate(header):
         width = max_len_value if isinstance(max_len_value, int) else max_len_value[i]
 
-        println(f' {h : ^{width}} ', color=color_index, endl='', withlvl=False)
+        println(f' {h : ^{width}} ', color=color_index, end='', withlvl=False)
     new_line()
 
 
@@ -667,15 +675,15 @@ def __print_matrix_row(
     indentation : str
         The indentation of the line
     """
-    println(indentation, endl='', withlvl=False)
-    println(index_name,  endl='', color=color_index, withlvl=False)
-    println(start_line,  endl='', color=color_style, withlvl=False)
+    println(indentation, end='', withlvl=False)
+    println(index_name,  end='', color=color_index, withlvl=False)
+    println(start_line,  end='', color=color_style, withlvl=False)
 
     for i, cell in enumerate(row):
         cellstr = str(cell) if str(cell) not in ('None', 'nan', 'NaN', '') else nan_format
 
         width = max_len_value if isinstance(max_len_value, int) else max_len_value[i]
-        println(f' {cellstr : ^{width}} ', color=color, endl='', withlvl=False)
+        println(f' {cellstr : ^{width}} ', color=color, end='', withlvl=False)
     println(end_line, color=color_style, withlvl=False)
 
 
@@ -976,9 +984,9 @@ def __print_matrix_numpy_style(
     for index_row_id, row in enumerate(matrix):
         # string line
         if index_row_id == 0:
-            println(indentation, '[ ', endl='', color=color_style, withlvl=False)
+            println(indentation, '[ ', end='', color=color_style, withlvl=False)
         else:
-            println('  ', indentation, endl='', withlvl=False)
+            println('  ', indentation, end='', withlvl=False)
 
         __print_matrix_row(
             row = row,
@@ -1474,7 +1482,7 @@ def print_matrix(
         max_len_value = [__max_len_value(column, nan_format) for column in matrix_by_column]
 
     if title:
-        space = max([len(i) for i in indexes]) + sum(len(i) + 3 for i in header) + 2
+        space = max([len(str(i)) for i in indexes]) + sum(len(str(i)) + 3 for i in header) + 2
         print_title(
             title,
             color=title_color,
@@ -1489,18 +1497,19 @@ def print_matrix(
     if isinstance(indexes, list):
         len_index: int = __max_len_value(indexes, nan_format)
 
-    kwargs = {'matrix' : matrix,
-              'header' : header,
-              'indexes' : indexes,
-              'nan_format' : nan_format,
-              'color' : color,
-              'color_index' : color_index,
-              'color_style' : color_style,
-              'max_len_value' : max_len_value,
-              'len_index' : len_index,
-              'style' : style,
-              'withlvl' : withlvl
-              }
+    kwargs = {
+        'matrix' : matrix,
+        'header' : header,
+        'indexes' : indexes,
+        'nan_format' : nan_format,
+        'color' : color,
+        'color_index' : color_index,
+        'color_style' : color_style,
+        'max_len_value' : max_len_value,
+        'len_index' : len_index,
+        'style' : style,
+        'withlvl' : withlvl
+    }
 
     if style is None:
         __print_matrix_without_style(**kwargs)
@@ -1569,7 +1578,7 @@ def inputln(
     """
     println(
         *message,
-        endl=endl,
+        end=endl,
         withlvl=withlvl,
         color=color,
         bg_color=bg_color,
@@ -1629,8 +1638,11 @@ def textbox(
         The separator between the values, by default is a space
 
     border : str, optional
-        The style of the border, the style must be one of the `STYLES_LIST`,
-        by default is `simpleline`
+        The style of the border, the style must be one of the
+        `['simpleline', `sl`, 'doubleline', `dl`]`, by default is `simpleline`
+        - `simpleline` or `sl` The border is a simple line
+        - `doubleline` or `dl` The border is a double line
+
 
     border_color : str, optional
         The color of the border, the color must be one of the `COLORS_LIST`
@@ -1643,27 +1655,41 @@ def textbox(
 
     max_len = max([len(l) for l in lines])
 
-    if border == 'simpleline':
+    border = border.lower()
+
+    if border in ('simpleline', 'sl'):
         top = term.Line.STL + term.Line.SH * (max_len + 2) + term.Line.STR
         bottom = term.Line.SBL + term.Line.SH * (max_len + 2) + term.Line.SBR
         vertical_blank = term.Line.SV + ' ' * (max_len + 2) + term.Line.SV
         vertical = term.Line.SV
-    elif border == 'doubleline':
+
+    elif border in ('doubleline', 'dl'):
         top = term.Line.DTL + term.Line.DH * (max_len + 2) + term.Line.DTR
         bottom = term.Line.DBL + term.Line.DH * (max_len + 2) + term.Line.DBR
         vertical_blank = term.Line.DV + ' ' * (max_len + 2) + term.Line.DV
         vertical = term.Line.DV
+
     else:
         raise ex.ErrorNotDefinedStyle(border)
 
+
     def pln(s: str) -> None:
+        """
+        Print a line to the console
+
+        Parameters
+        ----------
+        s : str
+            The line to print
+        """
         println(s, withlvl=withlvl, color=border_color, style=border_style)
+
 
     pln(top)
     pln(vertical_blank)
 
     for l in lines:
-        println(vertical, withlvl=withlvl, color=border_color, style=border_style, endl='')
+        println(vertical, withlvl=withlvl, color=border_color, style=border_style, end='')
         println(
             ' ' + l + ' ',
             withlvl=False,
@@ -1671,9 +1697,9 @@ def textbox(
             bg_color=bg_color,
             reset_all_colors=reset_all_colors,
             style=style,
-            endl=''
+            end=''
         )
-        println(' ' * (max_len - len(l)), withlvl=False, endl='')
+        println(' ' * (max_len - len(l)), withlvl=False, end='')
         println(vertical, withlvl=False, color=border_color, style=border_style)
 
     pln(vertical_blank)
@@ -1714,6 +1740,23 @@ def progress_bar(
 
     pct : bool, optional
         True to print the percentage, False otherwise, by default is `True`
+
+    Raises
+    ------
+    ValueError
+        If the progress is not between 0 and 1
+        If the width is less than 0
+        If the bar is not a single character
+        If the start_bar is not a single character
+        If the end_bar is not a single character
+
+    Examples
+    --------
+    >>> progress_bar(0.5)
+    ... [######.........................] (50%)
+
+    >>> progress_bar(0.5, width=20, bar='=', start_bar='|', end_bar='|', spacing='-', pct=False)
+    ... |====================----------|
     """
 
     if progress < 0 or progress > 1:
@@ -1837,7 +1880,7 @@ def print_tree(
             else:
                 bar_line = f'{vertical_and_right}{horizontal}'
 
-            println(f'{start_bar}{bar_line}', color=color_tree, endl=' ')
+            println(f'{start_bar}{bar_line}', color=color_tree, end=' ')
             println(k, **println_options)
 
             if isinstance(v, dict):
@@ -1849,7 +1892,7 @@ def print_tree(
             else:
                 last_lvl = ' ' if i == len_sub_tree - 1 else vertical
                 bar_line = f'{start_bar}{last_lvl}  {down_left}{horizontal}'
-                println(bar_line, color=color_tree, endl=' ')
+                println(bar_line, color=color_tree, end=' ')
                 println(v, **println_options)
 
     recursive_print_tree(tree)
@@ -1858,17 +1901,12 @@ def print_tree(
 def bar_chart(
         data: list[int] | dict,
         colors: list[str],
-        colums: list[str] = None,
         bar: str = '███',
         title: str = '',
         title_color: str = '',
         title_style: str = '',
         title_bg_color: str = '',
         title_align: str = 'center',
-        x_label: str = '',
-        x_label_color: str = '',
-        x_label_style: str = '',
-        x_label_bg_color: str = ''
     ) -> None:
     """
     Print a bar chart to the console.
@@ -1880,9 +1918,6 @@ def bar_chart(
 
     colors : list[str]
         The colors of the bars
-
-    colums : list[str], optional
-        The colums of the data, by default is None
 
     bar : str, optional
         The bar to print, by default is '███'
@@ -1900,7 +1935,11 @@ def bar_chart(
         The background color of the title, by default has no background color
 
     title_align : str, optional
-        The align of the title, by default is 'center'
+        The align of the title, by default is 'center', the options are
+        - `center` The title is centered
+        - `left` The title is aligned to the left
+        - `right` The title is aligned to the right
+
     """
 
     def normalize(value: int) -> int:
@@ -1935,9 +1974,13 @@ def bar_chart(
                 chart_line += ' ' * len_bar
         println(chart_line)
 
-    println('-' * (num_values * len_bar))
-    println(' '.join(
-        colorize(str(value).center(len_bar - 1), colors[i]) for i, value in enumerate(data)
+    line(size=num_values * len_bar)
+    println(
+        ' '.join(
+            colorize(
+                str(value).center(len_bar - 1), colors[i]
+            )
+            for i, value in enumerate(data)
         )
     )
 

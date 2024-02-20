@@ -222,11 +222,11 @@ class StyleTextCode(_ColorBase):
     """
     This class is used to store the style codes for the text.
     """
-    BOLD_CODE: int       = 1
-    DIM_CODE: int        = 2
-    UNDERLINE_CODE: int  = 4
-    BLINK_CODE: int      = 5
-    REVERSE_CODE: int    = 7
+    BOLD_CODE: int      = 1
+    DIM_CODE: int       = 2
+    UNDERLINE_CODE: int = 4
+    BLINK_CODE: int     = 5
+    REVERSE_CODE: int   = 7
     HIDDEN_CODE: int    = 8
 
 

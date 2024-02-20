@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ConsoleVerse',
-    version='0.0.2',
+    version='0.1.0',
     description='A Python library for managing console output',
     long_description=open('README.md', 'r').read(),
     long_description_content_type='text/markdown',
@@ -15,7 +15,7 @@ setup(
         # List your package dependencies here
     ],
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 3 - Beta',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.8',
