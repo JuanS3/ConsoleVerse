@@ -1687,6 +1687,9 @@ def textbox(
             bottom_right_symbol = term.Line.DBR
             vertical_symbol = term.Line.DV
 
+        else:
+            raise ex.ErrorNotDefinedStyle(border)
+
     else:
         raise ex.ErrorNotDefinedStyle(border)
 
