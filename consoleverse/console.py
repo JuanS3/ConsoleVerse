@@ -1590,7 +1590,6 @@ def inputln(
     return input_type(input())
 
 
-# TODO: add support for the personalized border style
 # TODO: add support text alignment
 def textbox(
         *message: Any,
@@ -1600,7 +1599,7 @@ def textbox(
         reset_all_colors: bool = True,
         style: str = '',
         sep: str = ' ',
-        border: str = 'simpleline',
+        border: str | dict = 'simpleline',
         border_color: str = '',
         border_style: str = '',
     ) -> None:
@@ -1637,11 +1636,18 @@ def textbox(
     sep : str, optional
         The separator between the values, by default is a space
 
-    border : str, optional
-        The style of the border, the style must be one of the
+    border : str | dict, optional
+        The style of the border, the style must be one of the if is a string
         `['simpleline', `sl`, 'doubleline', `dl`]`, by default is `simpleline`
         - `simpleline` or `sl` The border is a simple line
         - `doubleline` or `dl` The border is a double line
+        If is a dictionary, the dictionary must have the following keys
+        - `top_left` The top border left
+        - `top_right` The top border right
+        - `bottom_left` The bottom border left
+        - `bottom_right` The bottom border right
+        - `vertical` The vertical border
+        - `horizontal` The horizontal border
 
 
     border_color : str, optional
@@ -1655,22 +1661,40 @@ def textbox(
 
     max_len = max([len(l) for l in lines])
 
-    border = border.lower()
+    if isinstance(border, dict):
+        top_left_symbol = border['top_left']
+        top_right_symbol = border['top_right']
+        bottom_left_symbol = border['bottom_left']
+        bottom_right_symbol = border['bottom_right']
+        vertical_symbol = border['vertical']
+        horizontal_symbol = border['horizontal']
 
-    if border in ('simpleline', 'sl'):
-        top = term.Line.STL + term.Line.SH * (max_len + 2) + term.Line.STR
-        bottom = term.Line.SBL + term.Line.SH * (max_len + 2) + term.Line.SBR
-        vertical_blank = term.Line.SV + ' ' * (max_len + 2) + term.Line.SV
-        vertical = term.Line.SV
+    elif isinstance(border, str):
+        border = border.lower()
+        if border in ('simpleline', 'sl'):
+            horizontal_symbol = term.Line.SH
+            top_left_symbol = term.Line.STL
+            top_right_symbol = term.Line.STR
+            bottom_left_symbol = term.Line.SBL
+            bottom_right_symbol = term.Line.SBR
+            vertical_symbol = term.Line.SV
 
-    elif border in ('doubleline', 'dl'):
-        top = term.Line.DTL + term.Line.DH * (max_len + 2) + term.Line.DTR
-        bottom = term.Line.DBL + term.Line.DH * (max_len + 2) + term.Line.DBR
-        vertical_blank = term.Line.DV + ' ' * (max_len + 2) + term.Line.DV
-        vertical = term.Line.DV
+        elif border in ('doubleline', 'dl'):
+            horizontal_symbol = term.Line.DH
+            top_left_symbol = term.Line.DTL
+            top_right_symbol = term.Line.DTR
+            bottom_left_symbol = term.Line.DBL
+            bottom_right_symbol = term.Line.DBR
+            vertical_symbol = term.Line.DV
 
     else:
         raise ex.ErrorNotDefinedStyle(border)
+
+    horizontal = horizontal_symbol * (max_len + 2)
+    top = top_left_symbol + horizontal + top_right_symbol
+    bottom = bottom_left_symbol + horizontal + bottom_right_symbol
+    vertical_blank = vertical_symbol + ' ' * (max_len + 2) + vertical_symbol
+    vertical = vertical_symbol
 
 
     def pln(s: str) -> None:
