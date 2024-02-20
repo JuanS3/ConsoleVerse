@@ -1326,9 +1326,9 @@ def print_title(
 
     align : str, optional
         The alignment of the title, by default `center`
-        - `center` The title is centered
-        - `left` The title is aligned to the left
-        - `right` The title is aligned to the right
+        - `center` or `c` The title is centered
+        - `left` or `l` The title is aligned to the left
+        - `right` or `r` The title is aligned to the right
 
     num_values : int, optional
         The number of values to be displayed, by default 30
