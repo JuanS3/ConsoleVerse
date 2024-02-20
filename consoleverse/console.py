@@ -270,16 +270,16 @@ def _colorize(
         The text to colorize
 
     color : str
-        The color of the text, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the text, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     bg_color : str
-        The background color of the text, the color must be one of the `BACKGROUNS_LIST`
-        or `COLORS_LIST` for all colors available; by default has no color
+        The background color of the text, the color must be one of the `console.ColorBackground()`
+        or `console.ColorText()` for all colors available; by default has no color
 
     style : str
-        The style of the text, the style must be one of the `STYLES_LIST`,
+        The style of the text, the style must be one of the `console.StyleText()`,
         by default has no style
 
     reset_console_colors : bool
@@ -349,19 +349,19 @@ def println(
         False is not necessary, by default `True`
 
     color : str, optional
-        The color of the message, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the message, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     bg_color : str, optional
-        The background color of the message, the color must be one of the `BACKGROUNS_LIST`
-        or `COLORS_LIST` for all colors available; by default has no color
+        The background color of the message, the color must be one of the `console.ColorBackground()`
+        or `console.ColorText()` for all colors available; by default has no color
 
     reset_all_colors : bool, optional
         True to reset all colors, False is not necessary, by default `True`
 
     style : str, optional
-        The style of the message, the style must be one of the `STYLES_LIST`,
+        The style of the message, the style must be one of the `console.StyleText()`,
         by default has no style
 
     sep : str, optional
@@ -598,8 +598,8 @@ def __print_matrix_header(
         Longest value size index of the indexes
 
     color_index : str
-        The color of the index, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available
+        The color of the index, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available
 
     extra_spacing : str
         The extra spacing befote printing the header
@@ -648,20 +648,20 @@ def __print_matrix_row(
         Longest value size in the matrix
 
     color : str
-        The color of the matrix items, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available
+        The color of the matrix items, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available
 
     nan_format : str
         The formatted string to print a NaN/None value
 
     color_style : str
         The color style to print the matrix, for example the grid lines,
-        the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available
+        the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available
 
     color_index : str
-        The color of the index, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available
+        The color of the index, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available
 
     end_line : str
         The end of line to be printed
@@ -730,19 +730,19 @@ def __print_matrix_base(
         The formatted string to print a NaN/None value, by default ''
 
     color : str, optional
-        The color of the matrix items, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the matrix items, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_index : str, optional
-        The color of the index, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the index, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_style : str, optional
         The color style to print the matrix, for example the grid lines,
-        the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     max_len_value : int
@@ -850,19 +850,19 @@ def __print_matrix_box_style(
         The formatted string to print a NaN/None value, by default ''
 
     color : str, optional
-        The color of the matrix items, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the matrix items, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_index : str, optional
-        The color of the index, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the index, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_style : str, optional
         The color style to print the matrix, for example the grid lines,
-        the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     max_len_value : int
@@ -944,19 +944,19 @@ def __print_matrix_numpy_style(
         The formatted string to print a NaN/None value, by default ''
 
     color : str, optional
-        The color of the matrix items, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the matrix items, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_index : str, optional
-        The color of the index, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the index, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_style : str, optional
         The color style to print the matrix, for example the grid lines,
-        the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     max_len_value : int
@@ -1038,19 +1038,19 @@ def __print_matrix_without_style(
         The formatted string to print a NaN/None value, by default ''
 
     color : str, optional
-        The color of the matrix items, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the matrix items, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_index : str, optional
-        The color of the index, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the index, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_style : str, optional
         The color style to print the matrix, for example the grid lines,
-        the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     max_len_value : int
@@ -1148,19 +1148,19 @@ def __print_matrix_simpleline_style(
         The formatted string to print a NaN/None value, by default ''
 
     color : str, optional
-        The color of the matrix items, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the matrix items, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_index : str, optional
-        The color of the index, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the index, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_style : str, optional
         The color style to print the matrix, for example the grid lines,
-        the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     max_len_value : int
@@ -1241,19 +1241,19 @@ def __print_matrix_doubleline_style(matrix,
         The formatted string to print a NaN/None value, by default ''
 
     color : str, optional
-        The color of the matrix items, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the matrix items, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_index : str, optional
-        The color of the index, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the index, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_style : str, optional
         The color style to print the matrix, for example the grid lines,
-        the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     max_len_value : int
@@ -1419,19 +1419,19 @@ def print_matrix(
         The formatted string to print a NaN/None value, by default ''
 
     color : str, optional
-        The color of the matrix items, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the matrix items, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_index : str, optional
-        The color of the index, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the index, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     color_style : str, optional
         The color style to print the matrix, for example the grid lines,
-        the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     withlvl : bool, optional
@@ -1446,15 +1446,15 @@ def print_matrix(
         The title of the matrix, by default has no title
 
     title_color : str, optional
-        The color of the title, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available
+        The color of the title, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available
 
     title_bg_color : str, optional
-        The background color of the title, the color must be one of the `BACKGROUNS_LIST`
-        or `COLORS_LIST` for all colors available
+        The background color of the title, the color must be one of the `console.ColorBackground()`
+        or `console.ColorText()` for all colors available
 
     title_style : str, optional
-        The style of the title, the style must be one of the `STYLES_LIST`
+        The style of the title, the style must be one of the `console.StyleText()`
 
     title_align : str, optional
         The alignment of the title, by default `center`
@@ -1558,19 +1558,19 @@ def inputln(
         False is not necessary, by default `True`
 
     color : str, optional
-        The color of the message, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the message, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     bg_color : str, optional
-        The background color of the message, the color must be one of the `BACKGROUNS_LIST`
-        or `COLORS_LIST` for all colors available; by default has no color
+        The background color of the message, the color must be one of the `console.ColorBackground()`
+        or `console.ColorText()` for all colors available; by default has no color
 
     reset_all_colors : bool, optional
         True to reset all colors, False is not necessary, by default `True`
 
     style : str, optional
-        The style of the message, the style must be one of the `STYLES_LIST`,
+        The style of the message, the style must be one of the `console.StyleText()`,
         by default has no style
 
     sep : str, optional
@@ -1619,19 +1619,19 @@ def textbox(
         False is not necessary, by default `True`
 
     color : str, optional
-        The color of the message, the color must be one of the `COLORS_LIST`
-        ['RED', 'GREEN', ...], `console.COLORS_LIST` for all colors available;
+        The color of the message, the color must be one of the `console.ColorText()`
+        ['RED', 'GREEN', ...], `console.ColorText()` for all colors available;
         by default has no color
 
     bg_color : str, optional
-        The background color of the message, the color must be one of the `BACKGROUNS_LIST`
-        or `COLORS_LIST` for all colors available; by default has no color
+        The background color of the message, the color must be one of the `console.ColorBackground()`
+        or `console.ColorText()` for all colors available; by default has no color
 
     reset_all_colors : bool, optional
         True to reset all colors, False is not necessary, by default `True`
 
     style : str, optional
-        The style of the message, the style must be one of the `STYLES_LIST`,
+        The style of the message, the style must be one of the `console.StyleText()`,
         by default has no style
 
     sep : str, optional
@@ -1645,10 +1645,10 @@ def textbox(
 
 
     border_color : str, optional
-        The color of the border, the color must be one of the `COLORS_LIST`
+        The color of the border, the color must be one of the `console.ColorText()`
 
     border_style : str, optional
-        The style of the border, the style must be one of the `STYLES_LIST`
+        The style of the border, the style must be one of the `console.StyleText()`
     """
     message = __to_string(*message, sep=sep)
     lines = message.split('\n')
@@ -1797,7 +1797,7 @@ def print_tree(
         The dictionary to print
 
     style_dict : str, optional
-        The style of the dictionary, the style must be one of the `STYLES_LIST`,
+        The style of the dictionary, the style must be one of the `console.StyleText()`,
         by default is `simple`
 
     Examples
