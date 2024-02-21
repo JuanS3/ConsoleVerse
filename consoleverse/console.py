@@ -1590,7 +1590,6 @@ def inputln(
     return input_type(input())
 
 
-# TODO: add support text alignment
 def textbox(
         *message: Any,
         withlvl: bool = True,
@@ -1602,6 +1601,8 @@ def textbox(
         border: str | dict = 'simpleline',
         border_color: str = '',
         border_style: str = '',
+        allow_empty: bool = False,
+        text_align: str = 'left'
     ) -> None:
     """
     Print the message to the console, the `endl` is the same as `end` in print function
@@ -1649,57 +1650,40 @@ def textbox(
         - `vertical` The vertical border
         - `horizontal` The horizontal border
 
-
     border_color : str, optional
         The color of the border, the color must be one of the `console.ColorText()`
 
     border_style : str, optional
         The style of the border, the style must be one of the `console.StyleText()`
+
+    allow_empty : bool, optional
+        True to allow blank lines, at the beginning and end of the message, by default `True`
+
+    text_align : str, optional
+        The alignment of the text, by default `left`
+        - `center` or `c` The text is centered
+        - `left` or `l` The text is aligned to the left
+        - `right` or `r` The text is aligned to the right
+
+    Raises
+    ------
+    ErrorNotDefinedStyle
+        If the style is not defined
+
+    Examples
+    --------
+    >>> textbox('ConsoleVerse', border='doubleline', allow_empty=True)
+    ... ╔═══════════════╗
+    ... ║              ║
+    ... ║ ConsoleVerse ║
+    ... ║              ║
+    ... ╚═══════════════╝
+
+    >>> textbox('ConsoleVerse', border='simpleline')
+    ... ┌───────────────┐
+    ... │ ConsoleVerse │
+    ... └───────────────┘
     """
-    message = __to_string(*message, sep=sep)
-    lines = message.split('\n')
-
-    max_len = max([len(l) for l in lines])
-
-    if isinstance(border, dict):
-        top_left_symbol = border['top_left']
-        top_right_symbol = border['top_right']
-        bottom_left_symbol = border['bottom_left']
-        bottom_right_symbol = border['bottom_right']
-        vertical_symbol = border['vertical']
-        horizontal_symbol = border['horizontal']
-
-    elif isinstance(border, str):
-        border = border.lower()
-        if border in ('simpleline', 'sl'):
-            horizontal_symbol = term.Line.SH
-            top_left_symbol = term.Line.STL
-            top_right_symbol = term.Line.STR
-            bottom_left_symbol = term.Line.SBL
-            bottom_right_symbol = term.Line.SBR
-            vertical_symbol = term.Line.SV
-
-        elif border in ('doubleline', 'dl'):
-            horizontal_symbol = term.Line.DH
-            top_left_symbol = term.Line.DTL
-            top_right_symbol = term.Line.DTR
-            bottom_left_symbol = term.Line.DBL
-            bottom_right_symbol = term.Line.DBR
-            vertical_symbol = term.Line.DV
-
-        else:
-            raise ex.ErrorNotDefinedStyle(border)
-
-    else:
-        raise ex.ErrorNotDefinedStyle(border)
-
-    horizontal = horizontal_symbol * (max_len + 2)
-    top = top_left_symbol + horizontal + top_right_symbol
-    bottom = bottom_left_symbol + horizontal + bottom_right_symbol
-    vertical_blank = vertical_symbol + ' ' * (max_len + 2) + vertical_symbol
-    vertical = vertical_symbol
-
-
     def pln(s: str) -> None:
         """
         Print a line to the console
@@ -1711,14 +1695,65 @@ def textbox(
         """
         println(s, withlvl=withlvl, color=border_color, style=border_style)
 
+    _bs = {
+        'simpleline': {
+            'top_left': term.Line.STL,
+            'top_right': term.Line.STR,
+            'bottom_left': term.Line.SBL,
+            'bottom_right': term.Line.SBR,
+            'vertical': term.Line.SV,
+            'horizontal': term.Line.SH,
+        },
+        'doubleline': {
+            'top_left': term.Line.DTL,
+            'top_right': term.Line.DTR,
+            'bottom_left': term.Line.DBL,
+            'bottom_right': term.Line.DBR,
+            'vertical': term.Line.DV,
+            'horizontal': term.Line.DH,
+        }
+    }
+
+    message = __to_string(*message, sep=sep)
+    lines = message.split('\n')
+    max_len = max([len(l) for l in lines])
+    bname = ''
+
+    if isinstance(border, dict):
+        _bs['custom'] = border
+        bname = 'custom'
+
+    elif isinstance(border, str):
+        if border in ('simpleline', 'sl'):
+            bname = 'simpleline'
+        elif border in ('doubleline', 'dl'):
+            bname = 'doubleline'
+
+    if bname == '':
+        raise ex.ErrorNotDefinedStyle(border)
+
+    horizontal = _bs[bname]['horizontal'] * (max_len + 2)
+    top = _bs[bname]['top_left'] + horizontal + _bs[bname]['top_right']
+    bottom = _bs[bname]['bottom_left'] + horizontal + _bs[bname]['bottom_right']
+    vertical = _bs[bname]['vertical']
+    vertical_blank = vertical + ' ' * (max_len + 2) + vertical
 
     pln(top)
-    pln(vertical_blank)
+    if allow_empty:
+        pln(vertical_blank)
 
     for l in lines:
+        alignments = {
+            'c': '^',
+            'r': '>',
+            'l': '<',
+        }
+
+        align_line = f' {l:{alignments.get(text_align[0], "<")}{max_len}} '
+
         println(vertical, withlvl=withlvl, color=border_color, style=border_style, end='')
         println(
-            ' ' + l + ' ',
+            align_line,
             withlvl=False,
             color=color,
             bg_color=bg_color,
@@ -1726,11 +1761,12 @@ def textbox(
             style=style,
             end=''
         )
-        println(' ' * (max_len - len(l)), withlvl=False, end='')
         println(vertical, withlvl=False, color=border_color, style=border_style)
 
-    pln(vertical_blank)
+    if allow_empty:
+        pln(vertical_blank)
     pln(bottom)
+
 
 def progress_bar(
         progress: float,
@@ -1808,6 +1844,7 @@ def progress_bar(
         start_bar + bar * progressing_bar + spacing * (width - progressing_bar) + end_bar + pct_bar,
         **kwargs
     )
+
 
 def print_tree(
         tree: dict,
