@@ -1684,16 +1684,7 @@ def textbox(
     ... │ ConsoleVerse │
     ... └───────────────┘
     """
-    def pln(s: str) -> None:
-        """
-        Print a line to the console
-
-        Parameters
-        ----------
-        s : str
-            The line to print
-        """
-        println(s, withlvl=withlvl, color=border_color, style=border_style)
+    pln = lambda s: println(s, withlvl=withlvl, color=border_color, style=border_style)
 
     _bs = {
         'simpleline': {
