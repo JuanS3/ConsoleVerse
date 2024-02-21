@@ -1747,9 +1747,12 @@ def textbox(
             'c': '^',
             'r': '>',
             'l': '<',
+            'center': '^',
+            'right': '>',
+            'left': '<',
         }
 
-        align_line = f' {l:{alignments.get(text_align[0], "<")}{max_len}} '
+        align_line = f' {l:{alignments.get(text_align, "<")}{max_len}} '
 
         println(vertical, withlvl=withlvl, color=border_color, style=border_style, end='')
         println(
