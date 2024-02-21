@@ -28,7 +28,7 @@ To install ConsoleVerse, simply run:
 
 ```python
 # from PyPI
-pip install consoleverse
+pip install consoleverse # is not available yet
 
 # from GitHub
 pip install git+https://github.com/JuanS3/ConsoleVerse.git
@@ -48,7 +48,10 @@ To use ConsoleVerse in your Python project, simply import it and start using its
 >>> console.inputln("Your name? ")
 ... Your name?
 
->>> matrix = [[1, 2, 3], [4, 5, 6]]
+>>> matrix = [
+>>>     [1, 2, 3],
+>>>     [4, 5, 6]
+>>> ]
 >>> print_matrix(matrix)
 ...
 ...     0  1  2
@@ -57,11 +60,12 @@ To use ConsoleVerse in your Python project, simply import it and start using its
 ... 1 | 4  5  6 |
 ...     -------
 
->>> print_matrix(matrix,
->>>              header=['one', 'two', 'three'],
->>>              indexes=['row1', 'row2'],
->>>              style='semibox'
->>>              )
+>>> print_matrix(
+>>>     matrix,
+>>>     header=['one', 'two', 'three'],
+>>>     indexes=['row1', 'row2'],
+>>>     style='semibox'
+>>> )
 ...
 ...          one     two    three
 ...        -----------------------
