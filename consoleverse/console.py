@@ -1587,7 +1587,7 @@ def inputln(
         sep=sep
     )
 
-    return input_type(input())
+    return input_type(builtins.input())
 
 
 def textbox(
